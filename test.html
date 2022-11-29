@@ -5,22 +5,10 @@
 	<a class="list-group-item list-group-item-action" id="list-netflix" data-bs-toggle="list" href="#netflix" role="tab">Netflix</a>
 </div>
 <div class="tab-content text-justify">
-	<div class="tab-pane fade show active" id="official-site" role="tabpanel" aria-labelledby="list-official-site">
-		OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL
-		SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE
-	</div>
-	<div class="tab-pane fade" id="bilibili" role="tabpanel" aria-labelledby="list-bilibili">
-		BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI
-		BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI
-	</div>
-	<div class="tab-pane fade" id="youtube" role="tabpanel" aria-labelledby="list-youtube">
-		YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE
-		YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE
-	</div>
-	<div class="tab-pane fade" id="netflix" role="tabpanel" aria-labelledby="list-netflix">
-		NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX
-		NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX
-	</div>
+	<div class="tab-pane fade show active" id="official-site" role="tabpanel" aria-labelledby="list-official-site">OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE</div>
+	<div class="tab-pane fade" id="bilibili" role="tabpanel" aria-labelledby="list-bilibili">BLIBLI BLIBLI BLIBLI</div>
+	<div class="tab-pane fade" id="youtube" role="tabpanel" aria-labelledby="list-youtube">YOUTUBE YOUTUBE YOUTUBE</div>
+	<div class="tab-pane fade" id="netflix" role="tabpanel" aria-labelledby="list-netflix">NETFLIX NETFLIX NETFLIX</div>
 </div>
 
 https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101432-NQSedsCDQ6dP.png https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21827-10F6m50H4GJK.png
@@ -83,4 +71,23 @@ https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101432-NQSedsCDQ
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="list-group list-group-horizontal-sm mb-1 text-center" role="tablist">
+	<a class="list-group-item list-group-item-action active" id="list-official-site" data-bs-toggle="list" href="#official-site" role="tab">Official Site</a>
+</div>
+<div class="tab-content text-justify">
+	<div class="tab-pane fade show active" id="official-site" role="tabpanel" aria-labelledby="list-official-site">
+		OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL
+		SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE
+	</div>
+</div>
+
+<div class="list-group list-group-horizontal-sm mb-1 text-center" role="tablist">
+	${newLinks.forEach((link) => { return `<a class="list-group-item list-group-item-action" id="list-${link.url}-list" data-bs-toggle="list" href="#list-${link.url}" role="tab" aria-controls="${link}">${link}</a>`; })}
+</div>
+<div class="tab-content text-justify">
+	${newLinks.forEach((link) => { return `
+	<div class="tab-pane fade" id="list-${link.url}" role="tabpanel" aria-labelledby="list-${link.url}-list">${link.url}</div>
+	`; })}
 </div>

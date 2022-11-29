@@ -113,7 +113,7 @@ async function getAnime(keyword) {
 }
 
 function showAnime(obj) {
-	console.log(obj);
+	// console.log(obj);
 
 	headerContent.innerHTML = `<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
 
@@ -121,7 +121,7 @@ function showAnime(obj) {
 
 	obj.forEach(
 		({
-			title: { romaji, english, native },
+			title,
 			coverImage: { extraLarge, large, medium },
 			startDate,
 			id,
@@ -129,7 +129,6 @@ function showAnime(obj) {
 				nodes: [studio1],
 			},
 			duration,
-			season,
 			episodes,
 			status,
 			genres,
@@ -140,59 +139,59 @@ function showAnime(obj) {
 			externalLinks,
 			format,
 		}) => {
-			english = english ? english : romaji ? romaji : native;
+			const animeId = id;
 
-			extraLarge = extraLarge ? extraLarge : large ? large : medium;
+			// Validate language title and set it to romaji if it's not available in english. If it's not available in romaji, set it to native.
+			const [englishTitle, romajiTitle, nativeTitle] = validateTitle(title);
 
-			description = description ? description : "unknown";
-			// description = description.split(" ");
-			// description = description.slice(description.lastIndexOf(description), 1);
-			let str = "<br>(Source";
-			let lastDescription = description.lastIndexOf(str);
-			description = description.slice(0, lastDescription);
-			console.log(description);
+			// Validate if the anime has a cover image
+			const coverImage = validateCoverImage(extraLarge, large, medium);
 
-			let day = startDate?.day || "";
+			// Validate description if null/undefined and remove the source
+			const desc = validateDescriptions(description);
 
-			let month = startDate?.month || "";
-			month = months[month - 1] || "";
+			// Validate released date if null/undefined
+			const [day, month, year] = validateDateFormat(startDate?.day, startDate?.month, startDate?.year);
 
-			let year = startDate?.year || "";
+			// Validate format if null/undefined
+			const type = validateType(format);
 
-			format = format.split("_").join(" ");
+			// Validate genres if null/undefined
+			const genre = validateGenres(genres);
 
-			genres = genres.join(", ");
+			// Validate studio if null/undefined
+			const studioProducer = validateStudioProducer(studio1);
 
-			studio1 = studio1?.name || "unknown";
+			// Validate status if null/undefined and seperate it to 2 words (no underscore)
+			const stat = validateStatus(status);
 
-			status = status.toLowerCase().split("_").join(" ");
+			// Validate episodes if null/undefined
+			const episode = validate(episodes);
 
-			episodes = episodes || "unknown";
+			// Validate duration if null/undefined
+			const time = validate(duration);
 
-			duration = duration || "unknown";
+			// Validate the links that just Official Site, Youtube, Blibli, and Netflix
+			const externalLink = siteLinks(externalLinks);
 
-			const newLinks = externalLinks.reduce((acc, link) => {
-				if (link.site === "Official Site" || link.site === "Youtube" || link.site === "Bilibili TV" || link.site === "Netflix") {
-					acc.push(link);
-				}
-				return acc;
-			}, []);
+			// Validate synonyms if null/undefined
+			const synonym = validateSynonyms(synonyms);
 
 			content += `
 				<div class="col-12 col-lg-4 col-md-6 mb-5">
 					<div class="card">
 						<div class="card-body">
-							<h4 class="card-title mb-4">${english}</h4>
-							<img src="${extraLarge}" alt="${romaji}" class="rounded img-fluid w-100">
+							<h4 class="card-title mb-4">${englishTitle}</h4>
+							<img src="${coverImage}" alt="${englishTitle}" class="rounded img-fluid w-100">
 							<h5 class="font-extrabold my-3">${year}</h5>
 							<div class="modal-primary me-1 mb-1 d-inline-block">
 								<!-- Button trigger for primary themes modal -->
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal"
-									data-bs-target="#anime${id}">
+									data-bs-target="#anime${animeId}">
 									Detail
 								</button>
 								<!--primary theme Modal -->
-								<div class="modal fade text-left" id="anime${id}" tabindex="-1" role="dialog"
+								<div class="modal fade text-left" id="anime${animeId}" tabindex="-1" role="dialog"
 									aria-labelledby="myModalLabel160" aria-hidden="true">
 									<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
 										role="document">
@@ -200,41 +199,46 @@ function showAnime(obj) {
 											<div class="modal-header bg-primary">
 												<div class="d-xl-flex justify-content-xl-around w-100 text-center">
 													<div>
-														<h5 class="modal-title white" id="myModalLabel160">${english}</h5>
+														<h5 class="modal-title white" id="myModalLabel160">${englishTitle}</h5>
 													</div>
 													<div>
-														<h5 class="modal-title white">${romaji}</h5>
+														<h5 class="modal-title white">${romajiTitle}</h5>
 													</div>
 													<div>
-														<h5 class="modal-title white">${native}</h5>
+														<h5 class="modal-title white">${nativeTitle}</h5>
 													</div>
 												</div>
 												
-												<button type="button" class="close" data-bs-dismiss="modal"
+												<!-- <button type="button" class="close" data-bs-dismiss="modal"
 													aria-label="Close">
 													<i data-feather="x"></i>
-												</button>
+												</button> -->
 											</div>
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-12 col-xl-5 mb-3">
-														<img class="rounded img-fluid mx-auto d-block" src="${extraLarge}" alt="${romaji}" />
+														<img class="rounded img-fluid mx-auto d-block" src="${coverImage}" alt="${englishTitle}" />
 													</div>
 
 													<div class="col-12 col-xl-7">
 														<ul class="list-group w-100">
-															<li class="list-group-item"><span class="font-bold">Description</span>: ${description}</li>
-															<li class="list-group-item"><span class="font-bold">Released: ${day} ${month} ${year}</li>
-															<li class="list-group-item"><span class="font-bold">Type</span>: ${format}</li>
-															<li class="list-group-item"><span class="font-bold">Genre</span>: ${genres}</li>
-															<li class="list-group-item"><span class="font-bold">Studio</span>: ${studio1}</li>
-															<li class="list-group-item"><span class="font-bold">Status</span>: ${status}</li>
-															<li class="list-group-item"><span class="font-bold">Episode</span>: ${episodes} episode(s)</li>
-															<li class="list-group-item"><span class="font-bold">Duration</span>: ${duration} minute(s)</li>
+															<li class="list-group-item"><span class="font-extrabold">Synonym:</span> ${synonym}</li>
+															<li class="list-group-item"><span class="font-extrabold">Description:</span> ${desc}</li>
+															<li class="list-group-item"><span class="font-extrabold">Released:</span> ${day} ${month} ${year}</li>
+															<li class="list-group-item"><span class="font-extrabold">Studio:</span> ${studioProducer}</li>
+															<li class="list-group-item"><span class="font-extrabold">Type:</span> ${type}</li>
+															<li class="list-group-item"><span class="font-extrabold">Status:</span> ${stat}</li>
+															<li class="list-group-item"><span class="font-extrabold">Genre:</span> ${genre}</li>
+															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>
+															<li class="list-group-item"><span class="font-extrabold">Duration:</span> ${time} minute(s)</li>
+															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> 
+																${externalLink}
+															</li>
 														</ul>
 													</div>
 												</div>
 											</div>
+											
 											<div class="modal-footer">
 												<button type="button" class="btn btn-outline-light"
 													data-bs-dismiss="modal">
@@ -252,4 +256,86 @@ function showAnime(obj) {
 	);
 
 	animeList.innerHTML = content;
+}
+
+/*
+Utilities function
+*/
+function isUrlUnknown(url) {
+	return url === "#" ? "disabled" : "";
+}
+
+// Take links that just Official Site, Youtube, Blibli, and Netflix
+function siteLinks(links) {
+	// Just Official Site, Youtube, Blibli, and Netflix
+	let newLinks = links.reduce((acc, link) => {
+		if (link.site === "Official Site" || link.site === "Youtube" || link.site === "Bilibili TV" || link.site === "Netflix") {
+			acc.push(link);
+		}
+		return acc;
+	}, []);
+
+	// Validate if there is no link
+	newLinks = newLinks.length > 0 ? newLinks : [{ site: "unknown", url: "#" }];
+
+	// Concatenate all links
+	return (links = newLinks
+		.map(({ site, url }) => {
+			return `<a href="${url}" target="_blank" class="btn btn-sm btn-primary me-2 d-inline-block ${isUrlUnknown(url)}">${site}</a>`;
+		})
+		.join(""));
+}
+
+function validateDateFormat(day, month, year) {
+	day = day || "";
+
+	month = months[month - 1] || "";
+
+	year = year || "";
+
+	return [day, month, year];
+}
+
+function validateDescriptions(desc) {
+	let seperateSource = desc ? desc.search(/<br>/) : "unknown";
+	return seperateSource > 0 ? desc.slice(0, seperateSource) : seperateSource;
+}
+
+function validateCoverImage(extra, large, medium) {
+	return extra ? extra : large ? large : medium ? medium : "https://via.placeholder.com/300x450.png?text=No+Image";
+}
+
+function validateTitle({ english, romaji, native }) {
+	english = english ?? "NO 'EN' TITLE";
+	romaji = romaji ?? "NO 'ROMAJI' TITLE";
+	native = native ?? "NO 'JP' TITLE";
+	return [english, romaji, native];
+}
+
+function validateGenres(genres) {
+	return genres ? genres.join(", ") : "unknown";
+}
+
+function validateStudioProducer(studioProducer) {
+	return studioProducer?.name || "unknown";
+}
+
+function validateStatus(status) {
+	return status ? status.toLowerCase().split("_").join(" ") : "unknown";
+}
+
+function validateType(type) {
+	return type ? type.toLowerCase().split("_").join(" ") : "unknown";
+}
+
+function validateSynonyms(synonyms) {
+	return synonyms ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
+}
+
+function validate(data) {
+	return data ? data : "unknown";
+}
+
+function validateTags(tags) {
+	return tags ? tags.map((tag) => tag.name).join(", ") : "unknown";
 }

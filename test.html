@@ -1,0 +1,86 @@
+<div class="list-group list-group-horizontal-sm mb-1 text-center" role="tablist">
+	<a class="list-group-item list-group-item-action active" id="list-official-site" data-bs-toggle="list" href="#official-site" role="tab">Official Site</a>
+	<a class="list-group-item list-group-item-action" id="list-bilibili" data-bs-toggle="list" href="#bilibili" role="tab">Bilibili</a>
+	<a class="list-group-item list-group-item-action" id="list-youtube" data-bs-toggle="list" href="#youtube" role="tab">Youtube</a>
+	<a class="list-group-item list-group-item-action" id="list-netflix" data-bs-toggle="list" href="#netflix" role="tab">Netflix</a>
+</div>
+<div class="tab-content text-justify">
+	<div class="tab-pane fade show active" id="official-site" role="tabpanel" aria-labelledby="list-official-site">
+		OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL
+		SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE OFFICIAL SITE
+	</div>
+	<div class="tab-pane fade" id="bilibili" role="tabpanel" aria-labelledby="list-bilibili">
+		BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI
+		BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI BLIBLI
+	</div>
+	<div class="tab-pane fade" id="youtube" role="tabpanel" aria-labelledby="list-youtube">
+		YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE
+		YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE YOUTUBE
+	</div>
+	<div class="tab-pane fade" id="netflix" role="tabpanel" aria-labelledby="list-netflix">
+		NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX
+		NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX NETFLIX
+	</div>
+</div>
+
+https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101432-NQSedsCDQ6dP.png https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21827-10F6m50H4GJK.png
+<div class="col-12 col-lg-4 col-md-6 mb-5">
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title mb-4">${romaji}</h4>
+			<img src="${extraLarge}" alt="${romaji}" class="rounded img-fluid w-100" />
+			<h5 class="font-extrabold my-3">${year}</h5>
+			<div class="modal-primary me-1 mb-1 d-inline-block">
+				<!-- Button trigger for primary themes modal -->
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#anime">Detail</button>
+				<!--primary theme Modal -->
+				<div class="modal fade text-left" id="anime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+						<div class="modal-content">
+							<div class="modal-header bg-primary">
+								<div class="d-flex justify-content-xl-center w-100">
+									<div>
+										<h5 class="modal-title white" id="myModalLabel160">${english}</h5>
+									</div>
+									<div>
+										<h5 class="modal-title white">${romaji}</h5>
+									</div>
+									<div>
+										<h5 class="modal-title white">${native}</h5>
+									</div>
+								</div>
+
+								<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<i data-feather="x"></i>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-12 col-xl-5 mb-3">
+										<img class="rounded img-fluid mx-auto d-block" src="${extraLarge}" alt="${romaji}" />
+									</div>
+
+									<div class="col-12 col-xl-7">
+										<ul class="list-group w-100">
+											<li class="list-group-item">Released: ${day} ${month} ${year}</li>
+											<li class="list-group-item">Type: ${format}</li>
+											<li class="list-group-item">Studio: ${studio1}</li>
+											<li class="list-group-item">Status: ${status}</li>
+											<li class="list-group-item">Episode: ${episodes} episode(s)</li>
+											<li class="list-group-item">Duration: ${duration} minute(s)</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+									<span class="d-sm-block">Close</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

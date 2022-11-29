@@ -78,7 +78,7 @@ async function getAndShowAnime() {
 		const animes = await getAnime(searchBtn.value);
 		showAnime(animes.media);
 	} catch (error) {
-		alert(error);
+		console.log(error);
 	}
 }
 
@@ -122,7 +122,7 @@ function showAnime(obj) {
 	obj.forEach(
 		({
 			title,
-			coverImage: { extraLarge, large, medium },
+			coverImage,
 			startDate,
 			id,
 			studios: {
@@ -144,14 +144,15 @@ function showAnime(obj) {
 			// Validate language title and set it to romaji if it's not available in english. If it's not available in romaji, set it to native.
 			const [englishTitle, romajiTitle, nativeTitle] = validateTitle(title);
 
-			// Validate if the anime has a cover image
-			const coverImage = validateCoverImage(extraLarge, large, medium);
+			// Validate if the anime have no a cover image
+			const cover = validateCoverImage(coverImage);
 
 			// Validate description if null/undefined and remove the source
-			const desc = validateDescriptions(description);
+			let desc = validateDescriptions(description);
+			console.log(desc);
 
 			// Validate released date if null/undefined
-			const [day, month, year] = validateDateFormat(startDate?.day, startDate?.month, startDate?.year);
+			const [day, month, year] = validateDateFormat(startDate);
 
 			// Validate format if null/undefined
 			const type = validateType(format);
@@ -181,8 +182,8 @@ function showAnime(obj) {
 				<div class="col-12 col-lg-4 col-md-6 mb-5">
 					<div class="card">
 						<div class="card-body">
-							<h4 class="card-title mb-4">${englishTitle}</h4>
-							<img src="${coverImage}" alt="${englishTitle}" class="rounded img-fluid w-100">
+							<h4 class="card-title mb-4">${englishTitle !== "NO 'EN' TITLE" ? englishTitle : romajiTitle ? romajiTitle : nativeTitle}</h4>
+							<img src="${cover}" alt="${englishTitle !== "NO 'EN' TITLE" ? englishTitle : romajiTitle ? romajiTitle : nativeTitle}" class="rounded img-fluid w-100">
 							<h5 class="font-extrabold my-3">${year}</h5>
 							<div class="modal-primary me-1 mb-1 d-inline-block">
 								<!-- Button trigger for primary themes modal -->
@@ -217,7 +218,7 @@ function showAnime(obj) {
 											<div class="modal-body">
 												<div class="row">
 													<div class="col-12 col-xl-5 mb-3">
-														<img class="rounded img-fluid mx-auto d-block" src="${coverImage}" alt="${englishTitle}" />
+														<img class="rounded img-fluid mx-auto d-block" src="${cover}" alt="${englishTitle}" />
 													</div>
 
 													<div class="col-12 col-xl-7">
@@ -286,23 +287,29 @@ function siteLinks(links) {
 		.join(""));
 }
 
-function validateDateFormat(day, month, year) {
-	day = day || "";
+function validateDateFormat({ day, month, year }) {
+	day = day ?? "";
 
-	month = months[month - 1] || "";
+	month = months[month - 1] ?? "";
 
-	year = year || "";
+	year = year ?? "";
 
 	return [day, month, year];
 }
 
 function validateDescriptions(desc) {
-	let seperateSource = desc ? desc.search(/<br>/) : "unknown";
-	return seperateSource > 0 ? desc.slice(0, seperateSource) : seperateSource;
+	const noBR = desc ? desc.replace("<br>", "").replace("<br><br>", "<br>").replace("(", "[").replace(")", "]") : "unknown";
+	return noBR;
 }
 
-function validateCoverImage(extra, large, medium) {
-	return extra ? extra : large ? large : medium ? medium : "https://via.placeholder.com/300x450.png?text=No+Image";
+function validateCoverImage({ extraLarge, large, medium, color }) {
+	// const link = "https://via.placeholder.com/300x450.png?text=No+Image";
+	// extraLarge = extraLarge ?? link;
+	// large = large ?? link;
+	// medium = medium ?? link;
+	// color = color ?? link;
+	// return [extraLarge, large, medium, color];
+	return extraLarge ?? large ?? medium ?? color ?? "https://via.placeholder.com/300x450.png?text=No+Image";
 }
 
 function validateTitle({ english, romaji, native }) {
@@ -317,7 +324,7 @@ function validateGenres(genres) {
 }
 
 function validateStudioProducer(studioProducer) {
-	return studioProducer?.name || "unknown";
+	return studioProducer?.name ?? "unknown";
 }
 
 function validateStatus(status) {

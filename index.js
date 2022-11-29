@@ -340,7 +340,7 @@ function validateSynonyms(synonyms) {
 }
 
 function validate(data) {
-	return data ? data : "unknown";
+	return data ?? "unknown";
 }
 
 function validateTags(tags) {

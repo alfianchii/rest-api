@@ -140,16 +140,17 @@ function showAnime(obj) {
 			format,
 			source,
 		}) => {
+			// Take the anime id
 			const animeId = id;
 
 			// Validate language title and set it to romaji if it's not available in english. If it's not available in romaji, set it to native.
-			const [englishTitle, romajiTitle, nativeTitle] = validateTitle(title);
+			const [englishTitle, romajiTitle, nativeTitle] = validateTitles(title);
 
 			// Validate if the anime have no a cover image
-			const cover = validateCoverImage(coverImage);
+			const cover = validateCoverImages(coverImage);
 
 			// Validate description if null/undefined and remove the source
-			let desc = validateDescriptions(description);
+			const desc = validateDescriptions(description);
 
 			// Validate released date if null/undefined
 			const [day, month, year] = validateDateFormat(startDate);
@@ -173,7 +174,7 @@ function showAnime(obj) {
 			const time = validate(duration);
 
 			// Validate the links that just Official Site, Youtube, Blibli, and Netflix
-			const externalLink = siteLinks(externalLinks);
+			const externalLink = validateSiteLinks(externalLinks);
 
 			// Validate synonyms if null/undefined
 			const synonym = validateSynonyms(synonyms);
@@ -183,6 +184,9 @@ function showAnime(obj) {
 
 			// Validate adaptation if null/undefined and seperate it to 2 words (no underscore)
 			const adaptation = validateNoUnderscore(source);
+
+			// Validate score if null/undefined
+			const average = validate(averageScore);
 
 			content += `
 				<div class="col-12 col-lg-4 col-md-6 mb-5">
@@ -240,6 +244,7 @@ function showAnime(obj) {
 															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>
 															<li class="list-group-item"><span class="font-extrabold">Duration:</span> ${time} minute(s)</li>
 															<li class="list-group-item"><span class="font-extrabold me-1">Tag:</span> ${tag}</li>
+															<li class="list-group-item"><span class="font-extrabold me-1">Average Score:</span> ${average}</li>
 															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> ${externalLink}</li>
 														</ul>
 													</div>
@@ -273,7 +278,7 @@ function isUrlUnknown(url) {
 }
 
 // Take links that just Official Site, Youtube, Blibli, and Netflix
-function siteLinks(links) {
+function validateSiteLinks(links) {
 	// Just Official Site, Youtube, Blibli, and Netflix
 	let newLinks = links.reduce((acc, link) => {
 		if (link.site === "Official Site" || link.site === "Youtube" || link.site === "Bilibili TV" || link.site === "Netflix") {
@@ -308,7 +313,7 @@ function validateDescriptions(desc) {
 	return noBR;
 }
 
-function validateCoverImage({ extraLarge, large, medium, color }) {
+function validateCoverImages({ extraLarge, large, medium, color }) {
 	// const link = "https://via.placeholder.com/300x450.png?text=No+Image";
 	// extraLarge = extraLarge ?? link;
 	// large = large ?? link;
@@ -318,7 +323,7 @@ function validateCoverImage({ extraLarge, large, medium, color }) {
 	return extraLarge ?? large ?? medium ?? color ?? "https://via.placeholder.com/300x450.png?text=No+Image";
 }
 
-function validateTitle({ english, romaji, native }) {
+function validateTitles({ english, romaji, native }) {
 	english = english ?? "NO 'EN' TITLE";
 	romaji = romaji ?? "NO 'ROMAJI' TITLE";
 	native = native ?? "NO 'JP' TITLE";

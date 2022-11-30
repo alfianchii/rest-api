@@ -181,6 +181,9 @@ function showAnime(obj) {
 			// Validate tags if null/undefined
 			const tag = validateTags(tags);
 
+			// Validate adaptation if null/undefined and seperate it to 2 words (no underscore)
+			const adaptation = validateNoUnderscore(source);
+
 			content += `
 				<div class="col-12 col-lg-4 col-md-6 mb-5">
 					<div class="card">
@@ -231,6 +234,7 @@ function showAnime(obj) {
 															<li class="list-group-item"><span class="font-extrabold">Released:</span> ${day} ${month} ${year}</li>
 															<li class="list-group-item"><span class="font-extrabold">Studio:</span> ${studioProducer}</li>
 															<li class="list-group-item"><span class="font-extrabold">Type:</span> ${type}</li>
+															<li class="list-group-item"><span class="font-extrabold">Adaptation:</span> ${adaptation}</li>
 															<li class="list-group-item"><span class="font-extrabold">Status:</span> ${stat}</li>
 															<li class="list-group-item"><span class="font-extrabold">Genre:</span> ${genre}</li>
 															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>

@@ -28,7 +28,6 @@ query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which var
 				day
 			}
 			duration
-			season
 			episodes
 			chapters
 			status
@@ -59,6 +58,7 @@ query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which var
 				site
 			}
 			format
+			source
 		}
 	}
 }
@@ -138,6 +138,7 @@ function showAnime(obj) {
 			description,
 			externalLinks,
 			format,
+			source,
 		}) => {
 			const animeId = id;
 
@@ -149,13 +150,12 @@ function showAnime(obj) {
 
 			// Validate description if null/undefined and remove the source
 			let desc = validateDescriptions(description);
-			console.log(desc);
 
 			// Validate released date if null/undefined
 			const [day, month, year] = validateDateFormat(startDate);
 
 			// Validate format if null/undefined
-			const type = validateType(format);
+			const type = validateNoUnderscore(format);
 
 			// Validate genres if null/undefined
 			const genre = validateGenres(genres);
@@ -164,7 +164,7 @@ function showAnime(obj) {
 			const studioProducer = validateStudioProducer(studio1);
 
 			// Validate status if null/undefined and seperate it to 2 words (no underscore)
-			const stat = validateStatus(status);
+			const stat = validateNoUnderscore(status);
 
 			// Validate episodes if null/undefined
 			const episode = validate(episodes);
@@ -177,6 +177,9 @@ function showAnime(obj) {
 
 			// Validate synonyms if null/undefined
 			const synonym = validateSynonyms(synonyms);
+
+			// Validate tags if null/undefined
+			const tag = validateTags(tags);
 
 			content += `
 				<div class="col-12 col-lg-4 col-md-6 mb-5">
@@ -232,9 +235,8 @@ function showAnime(obj) {
 															<li class="list-group-item"><span class="font-extrabold">Genre:</span> ${genre}</li>
 															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>
 															<li class="list-group-item"><span class="font-extrabold">Duration:</span> ${time} minute(s)</li>
-															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> 
-																${externalLink}
-															</li>
+															<li class="list-group-item"><span class="font-extrabold me-1">Tag:</span> ${tag}</li>
+															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> ${externalLink}</li>
 														</ul>
 													</div>
 												</div>
@@ -327,12 +329,8 @@ function validateStudioProducer(studioProducer) {
 	return studioProducer?.name ?? "unknown";
 }
 
-function validateStatus(status) {
-	return status ? status.toLowerCase().split("_").join(" ") : "unknown";
-}
-
-function validateType(type) {
-	return type ? type.toLowerCase().split("_").join(" ") : "unknown";
+function validateNoUnderscore(data) {
+	return data.split("_").join(" ") ?? "unknown";
 }
 
 function validateSynonyms(synonyms) {

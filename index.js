@@ -72,21 +72,45 @@ let headerContent = document.querySelector("#header-content");
 let paginationBtn = document.querySelector(".pagination");
 
 document.getElementById("search-button").addEventListener("click", async function () {
-	getAndShowAnime();
+	getAndShowAnime(1, 6);
 });
+
+function showPagination(totalData, perPage, currentPage) {
+	currentPage = parseInt(currentPage);
+	paginationBtn.innerHTML = "";
+	let pagination = Math.ceil(totalData / perPage);
+	let paginationContent = `
+		<li class="page-item">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+		</li>`;
+
+	for (let i = 1; i <= pagination; i++) {
+		paginationContent += `
+			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
+		`;
+	}
+
+	paginationContent += `
+		<li class="page-item">
+			<a class="page-link" href="#">Next</a>
+		</li>
+	`;
+
+	paginationBtn.innerHTML = paginationContent;
+}
 
 document.addEventListener("click", function (e) {
 	if (e.target.classList.contains("page-link")) {
 		const childrens = paginationBtn.children;
 		let currentPage = e.target; // e.target.innerHTML
 		const allBtn = document.querySelectorAll(".page-link");
-
 		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
 			// Remove active
 			for (const child of childrens) {
 				child.firstElementChild.classList.remove("active");
 			}
 			currentPage.classList.add("active");
+			return getAndShowAnime(currentPage.innerHTML, 6);
 		} else if (currentPage.textContent === "Next") {
 			for (const btn of allBtn) {
 				if (btn.classList.contains("active")) {
@@ -99,7 +123,7 @@ document.addEventListener("click", function (e) {
 					btn.classList.remove("active");
 					btn.parentElement.nextElementSibling.firstElementChild.classList.add("active");
 					currentPage = parseInt(btn.textContent) + 1;
-					return getAndShowAnime(currentPage);
+					return getAndShowAnime(currentPage, 6);
 				}
 			}
 		} else if (currentPage.textContent === "Prev") {
@@ -114,19 +138,25 @@ document.addEventListener("click", function (e) {
 					btn.classList.remove("active");
 					btn.parentElement.previousElementSibling.firstElementChild.classList.add("active");
 					currentPage = parseInt(btn.textContent) - 1;
-					return getAndShowAnime(currentPage);
+					return getAndShowAnime(currentPage, 6);
 				}
 			}
 		}
-		console.log(currentPage);
 	}
 });
 
-async function getAndShowAnime(currentPg, page) {
+async function getAndShowAnime(currentPg, perPage) {
 	try {
-		const animes = await getAnime(searchBtn.value, currentPg, page);
+		const animes = await getAnime(searchBtn.value, currentPg);
+
+		let totalData;
+		if (animes.pageInfo.total === 5000) {
+			animes.pageInfo.total = 50;
+			totalData = animes.pageInfo.total;
+		}
+
 		showAnime(animes.media);
-		console.log(animes);
+		showPagination(totalData, perPage, currentPg);
 	} catch (error) {
 		console.log(error);
 	}
@@ -365,12 +395,6 @@ function validateDescriptions(desc) {
 }
 
 function validateCoverImages({ extraLarge, large, medium, color }) {
-	// const link = "https://via.placeholder.com/300x450.png?text=No+Image";
-	// extraLarge = extraLarge ?? link;
-	// large = large ?? link;
-	// medium = medium ?? link;
-	// color = color ?? link;
-	// return [extraLarge, large, medium, color];
 	return extraLarge ?? large ?? medium ?? color ?? "https://via.placeholder.com/300x450.png?text=No+Image";
 }
 

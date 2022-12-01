@@ -1,25 +1,25 @@
-function showPagination(jumlahHalaman) {
-	// Pagination
-	const pagination = document.querySelector(".pagination");
-	pagination.innerHTML = "";
-	for (let i = 1; i <= jumlahHalaman; i++) {
-		pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`;
-	}
+// function showPagination(jumlahHalaman) {
+// 	// Pagination
+// 	const pagination = document.querySelector(".pagination");
+// 	pagination.innerHTML = "";
+// 	for (let i = 1; i <= jumlahHalaman; i++) {
+// 		pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`;
+// 	}
 
-	// Add active class to the first page
-	pagination.firstElementChild.classList.add("active");
+// 	// Add active class to the first page
+// 	pagination.firstElementChild.classList.add("active");
 
-	// Add active class to the clicked page
-	pagination.addEventListener("click", function (e) {
-		if (e.target.classList.contains("page-link")) {
-			pagination.querySelector(".active").classList.remove("active");
-			e.target.parentElement.classList.add("active");
-		}
-	});
+// 	// Add active class to the clicked page
+// 	pagination.addEventListener("click", function (e) {
+// 		if (e.target.classList.contains("page-link")) {
+// 			pagination.querySelector(".active").classList.remove("active");
+// 			e.target.parentElement.classList.add("active");
+// 		}
+// 	});
 
-	// Add previous and next button
-	// pagination.innerHTML = `<li class="page-item"><a class="page-link" href="#">Prev</a></li>` + pagination.innerHTML + `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
-}
+// 	// Add previous and next button
+// 	// pagination.innerHTML = `<li class="page-item"><a class="page-link" href="#">Prev</a></li>` + pagination.innerHTML + `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+// }
 
 function showAnime(obj) {
 	// console.log(obj);
@@ -203,4 +203,16 @@ function showAnime(obj) {
 	);
 
 	animeList.innerHTML = content;
+}
+
+function showPagination(totalData, perPage) {
+	paginationBtn.innerHTML = "";
+	let pagination = Math.ceil(totalData / perPage);
+	let paginationContent = ``;
+	for (let i = 1; i <= pagination; i++) {
+		paginationContent += `
+			<li class="page-item"><a class="page-link ${i === 1 ? "active" : ""}" href="#">${i}</a></li>
+		`;
+	}
+	paginationBtn.innerHTML = paginationContent;
 }

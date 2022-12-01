@@ -11,6 +11,9 @@
 		<link rel="shortcut icon" href="assets/images/logo/favicon.png" type="image/png" />
 
 		<link rel="stylesheet" href="assets/css/shared/iconly.css" />
+
+		<link rel="stylesheet" href="assets/extensions/simple-datatables/style.css" />
+		<link rel="stylesheet" href="assets/css/pages/simple-datatables.css" />
 	</head>
 
 	<body>
@@ -112,16 +115,44 @@
 											</div>
 										</div>
 									</div>
+
+									<div class="row">
+										<div class="col-12 mt-5">
+											<div id="header-content">
+												<h4 class="text-center mb-5">Welcome to ALFI.ANI~!! (<_<)</h4>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-12">
+											<!-- Pagination -->
+											<section class="row fade show" id="anime-list" class="paginated-list"></section>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col">
+											<nav aria-label="Page navigation example">
+												<ul class="pagination pagination-primary justify-content-center">
+													<li class="page-item">
+														<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+													</li>
+													<li class="page-item"><a class="page-link active" href="#">1</a></li>
+													<li class="page-item"><a class="page-link" href="#">2</a></li>
+													<li class="page-item"><a class="page-link" href="#">3</a></li>
+													<li class="page-item"><a class="page-link" href="#">4</a></li>
+													<li class="page-item">
+														<a class="page-link" href="#">Next</a>
+													</li>
+												</ul>
+											</nav>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</section>
-
-					<div id="header-content">
-						<h4 class="text-center mb-5">Welcome to ALFI.ANI~!! (<_<)</h4>
-					</div>
-
-					<section class="row fade show" id="anime-list"></section>
 
 					<!-- Toast -->
 					<div id="">
@@ -151,9 +182,9 @@
 		<!-- Need: Apexcharts -->
 		<!-- <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
 		<script src="assets/js/pages/dashboard.js"></script> -->
-
-		<script src="./index.js"></script>
-
+		<!-- <script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+		<script src="assets/js/pages/simple-datatables.js"></script> -->
 		<script src="assets/js/pages/component-toasts.js"></script>
+		<script src="./index.js"></script>
 	</body>
 </html>

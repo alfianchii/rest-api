@@ -1,7 +1,7 @@
-// Here we define our query as a multi-line string
-// Storing it in a separate .graphql/.gql file is also possible
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+// Here we define our query as a multi-line string
+// Storing it in a separate .graphql/.gql file is also possible
 const query = `
 query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which variables will be used in the query (id)
 	Page (page: $page, perPage: $perPage) {
@@ -35,6 +35,7 @@ query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which var
 			genres
 			synonyms
 			averageScore
+			bannerImage
 			coverImage {
 				extraLarge
 				large
@@ -68,22 +69,71 @@ query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which var
 let searchBtn = document.getElementById("input-keyword");
 let animeList = document.getElementById("anime-list");
 let headerContent = document.querySelector("#header-content");
+let paginationBtn = document.querySelector(".pagination");
 
 document.getElementById("search-button").addEventListener("click", async function () {
 	getAndShowAnime();
 });
 
-async function getAndShowAnime() {
+document.addEventListener("click", function (e) {
+	if (e.target.classList.contains("page-link")) {
+		const childrens = paginationBtn.children;
+		let currentPage = e.target; // e.target.innerHTML
+		const allBtn = document.querySelectorAll(".page-link");
+
+		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
+			// Remove active
+			for (const child of childrens) {
+				child.firstElementChild.classList.remove("active");
+			}
+			currentPage.classList.add("active");
+		} else if (currentPage.textContent === "Next") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let lastElement = btn.parentElement.parentElement.lastElementChild.previousElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === lastElement) {
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.nextElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) + 1;
+					return getAndShowAnime(currentPage);
+				}
+			}
+		} else if (currentPage.textContent === "Prev") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let firstElement = btn.parentElement.parentElement.firstElementChild.nextElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === firstElement) {
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.previousElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) - 1;
+					return getAndShowAnime(currentPage);
+				}
+			}
+		}
+		console.log(currentPage);
+	}
+});
+
+async function getAndShowAnime(currentPg, page) {
 	try {
-		const animes = await getAnime(searchBtn.value);
+		const animes = await getAnime(searchBtn.value, currentPg, page);
 		showAnime(animes.media);
+		console.log(animes);
 	} catch (error) {
 		console.log(error);
 	}
 }
 
 // Get the anime's data
-async function getAnime(keyword) {
+async function getAnime(keyword, currentPage = 1, page = 6) {
 	// Define the config we'll need for our Api request
 	return await fetch(`https://graphql.anilist.co`, {
 		method: "POST",
@@ -95,8 +145,8 @@ async function getAnime(keyword) {
 			query: query,
 			variables: {
 				search: keyword,
-				page: 1,
-				// perPage: 100,
+				page: currentPage, // currentPage = 1
+				perPage: page, // page = 6
 			},
 		}),
 	})
@@ -115,7 +165,8 @@ async function getAnime(keyword) {
 function showAnime(obj) {
 	// console.log(obj);
 
-	headerContent.innerHTML = `<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
+	headerContent.innerHTML = `
+		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
 
 	let content = "";
 
@@ -339,7 +390,7 @@ function validateStudioProducer(studioProducer) {
 }
 
 function validateNoUnderscore(data) {
-	return data.split("_").join(" ") ?? "unknown";
+	return data ? data.split("_").join(" ") : "unknown";
 }
 
 function validateSynonyms(synonyms) {

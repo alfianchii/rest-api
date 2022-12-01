@@ -75,10 +75,11 @@ document.getElementById("search-button").addEventListener("click", async functio
 	getAndShowAnime(1, 6);
 });
 
-function showPagination(totalData, perPage, currentPage) {
+function showPagination(totalData = 1, perPage, currentPage) {
 	currentPage = parseInt(currentPage);
 	paginationBtn.innerHTML = "";
 	let pagination = Math.ceil(totalData / perPage);
+	console.log(totalData);
 	let paginationContent = `
 		<li class="page-item">
 			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
@@ -204,6 +205,7 @@ function showAnime(obj) {
 		({
 			title,
 			coverImage,
+			bannerImage,
 			startDate,
 			id,
 			studios: {

@@ -216,3 +216,6 @@ function showPagination(totalData, perPage) {
 	}
 	paginationBtn.innerHTML = paginationContent;
 }
+
+push to github
+change cover to banner

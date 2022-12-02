@@ -131,6 +131,8 @@ function paginationClick(e) {
 
 function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
+		spinner();
+
 		showAnime(currentPg, perPage);
 	} catch (error) {
 		console.log(error);
@@ -388,6 +390,20 @@ function showPagination(totalData = 1, perPage, currentPage) {
 /*
 Utilities function
 */
+
+function spinner() {
+	animeList.innerHTML = "";
+	paginationBtn.innerHTML = "";
+
+	animeList.innerHTML = `
+		<div class="text-center">
+			<div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+	`;
+}
+
 function isUrlUnknown(url) {
 	return url === "#" ? "disabled" : "";
 }

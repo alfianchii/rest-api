@@ -71,11 +71,19 @@ let animeList = document.getElementById("anime-list");
 let headerContent = document.querySelector("#header-content");
 let paginationBtn = document.querySelector(".pagination");
 
+// When the search button got clicked
 document.getElementById("search-button").addEventListener("click", async function () {
 	getAndShowAnime(1, 6);
 });
 
+// When pagination got clicked (prev, numbers, next)
 document.addEventListener("click", function (e) {
+	paginationClick(e);
+});
+
+// When
+
+function paginationClick(e) {
 	if (e.target.classList.contains("page-link")) {
 		const childrens = paginationBtn.children;
 		let currentPage = e.target; // e.target.innerHTML
@@ -119,46 +127,11 @@ document.addEventListener("click", function (e) {
 			}
 		}
 	}
-});
-
-function showPagination(totalData = 1, perPage, currentPage) {
-	currentPage = parseInt(currentPage);
-	paginationBtn.innerHTML = "";
-	let pagination = Math.floor(totalData / perPage);
-	let paginationContent = `
-		<li class="page-item">
-			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
-		</li>`;
-
-	for (let i = 1; i <= pagination; i++) {
-		paginationContent += `
-			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
-		`;
-	}
-
-	paginationContent += `
-		<li class="page-item">
-			<a class="page-link" href="#">Next</a>
-		</li>
-	`;
-
-	paginationBtn.innerHTML = paginationContent;
 }
 
-async function getAndShowAnime(currentPg = 1, perPage = 6) {
+function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
-		const data = await getAnime(searchBtn.value, currentPg);
-
-		const totalData = data.media.length;
-		const pageNumbers = Math.floor(totalData / perPage);
-
-		let animes = [];
-		for (let i = 0; i < pageNumbers; i++) {
-			animes.push(data.media.splice(i, perPage));
-		}
-
-		showAnime(animes, currentPg);
-		showPagination(totalData, perPage, currentPg);
+		showAnime(currentPg, perPage);
 	} catch (error) {
 		console.log(error);
 	}
@@ -194,15 +167,37 @@ async function getAnime(keyword) {
 		});
 }
 
-function showAnime(obj, currentPage) {
-	currentPage--;
+// Show anime and pagination
+async function showAnime(currentPage = 1, perPage = 6) {
+	// Get the anime's data
+	const data = await getAnime(searchBtn.value, currentPage);
 
+	// Take the sum of anime data
+	const sumData = data.media.length;
+
+	// Take the page numbers for the pagination's number
+	const pageNumbers = Math.floor(sumData / perPage);
+
+	// Splice the anime's data based on perPage
+	let animes = [];
+	if (data.media.length >= perPage) {
+		// If more than perPage
+		for (let i = 0; i < pageNumbers; i++) {
+			animes.push(data.media.splice(i, perPage));
+		}
+	} else {
+		// If less than perPage
+		animes.push(data.media);
+	}
+
+	// Header content
 	headerContent.innerHTML = `
 		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
 
+	// Show anime's data
 	let content = "";
 
-	obj[currentPage].forEach(
+	animes[currentPage - 1].forEach(
 		({
 			title,
 			coverImage,
@@ -350,7 +345,44 @@ function showAnime(obj, currentPage) {
 		},
 	);
 
+	// Change the header content
 	animeList.innerHTML = content;
+
+	// Show pagination
+	showPagination(sumData, perPage, currentPage);
+}
+
+function showPagination(totalData = 1, perPage, currentPage) {
+	// Parse the current page to integer
+	currentPage = parseInt(currentPage);
+
+	paginationBtn.innerHTML = "";
+
+	// If Math return 0, go return 1 instead nothing. If no, return the result
+	let pagination = Math.floor(totalData / perPage) === 0 ? 1 : Math.floor(totalData / perPage);
+
+	// Add Prev button
+	let paginationContent = `
+		<li class="page-item">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+		</li>`;
+
+	// Add child button (ex: 1, 2, 3)
+	for (let i = 1; i <= pagination; i++) {
+		paginationContent += `
+			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
+		`;
+	}
+
+	// Add Next button
+	paginationContent += `
+		<li class="page-item">
+			<a class="page-link" href="#">Next</a>
+		</li>
+	`;
+
+	// Show pagination
+	paginationBtn.innerHTML = paginationContent;
 }
 
 /*

@@ -75,31 +75,6 @@ document.getElementById("search-button").addEventListener("click", async functio
 	getAndShowAnime(1, 6);
 });
 
-function showPagination(totalData = 1, perPage, currentPage) {
-	currentPage = parseInt(currentPage);
-	paginationBtn.innerHTML = "";
-	let pagination = Math.ceil(totalData / perPage);
-	console.log(totalData);
-	let paginationContent = `
-		<li class="page-item">
-			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
-		</li>`;
-
-	for (let i = 1; i <= pagination; i++) {
-		paginationContent += `
-			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
-		`;
-	}
-
-	paginationContent += `
-		<li class="page-item">
-			<a class="page-link" href="#">Next</a>
-		</li>
-	`;
-
-	paginationBtn.innerHTML = paginationContent;
-}
-
 document.addEventListener("click", function (e) {
 	if (e.target.classList.contains("page-link")) {
 		const childrens = paginationBtn.children;
@@ -146,17 +121,43 @@ document.addEventListener("click", function (e) {
 	}
 });
 
-async function getAndShowAnime(currentPg, perPage) {
-	try {
-		const animes = await getAnime(searchBtn.value, currentPg);
+function showPagination(totalData = 1, perPage, currentPage) {
+	currentPage = parseInt(currentPage);
+	paginationBtn.innerHTML = "";
+	let pagination = Math.floor(totalData / perPage);
+	let paginationContent = `
+		<li class="page-item">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+		</li>`;
 
-		let totalData;
-		if (animes.pageInfo.total === 5000) {
-			animes.pageInfo.total = 50;
-			totalData = animes.pageInfo.total;
+	for (let i = 1; i <= pagination; i++) {
+		paginationContent += `
+			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
+		`;
+	}
+
+	paginationContent += `
+		<li class="page-item">
+			<a class="page-link" href="#">Next</a>
+		</li>
+	`;
+
+	paginationBtn.innerHTML = paginationContent;
+}
+
+async function getAndShowAnime(currentPg = 1, perPage = 6) {
+	try {
+		const data = await getAnime(searchBtn.value, currentPg);
+
+		const totalData = data.media.length;
+		const pageNumbers = Math.floor(totalData / perPage);
+
+		let animes = [];
+		for (let i = 0; i < pageNumbers; i++) {
+			animes.push(data.media.splice(i, perPage));
 		}
 
-		showAnime(animes.media);
+		showAnime(animes, currentPg);
 		showPagination(totalData, perPage, currentPg);
 	} catch (error) {
 		console.log(error);
@@ -164,7 +165,7 @@ async function getAndShowAnime(currentPg, perPage) {
 }
 
 // Get the anime's data
-async function getAnime(keyword, currentPage = 1, page = 6) {
+async function getAnime(keyword) {
 	// Define the config we'll need for our Api request
 	return await fetch(`https://graphql.anilist.co`, {
 		method: "POST",
@@ -176,8 +177,8 @@ async function getAnime(keyword, currentPage = 1, page = 6) {
 			query: query,
 			variables: {
 				search: keyword,
-				page: currentPage, // currentPage = 1
-				perPage: page, // page = 6
+				// page: currentPage, // currentPage = 1
+				// perPage: page, // page = 6
 			},
 		}),
 	})
@@ -193,15 +194,15 @@ async function getAnime(keyword, currentPage = 1, page = 6) {
 		});
 }
 
-function showAnime(obj) {
-	// console.log(obj);
+function showAnime(obj, currentPage) {
+	currentPage--;
 
 	headerContent.innerHTML = `
 		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
 
 	let content = "";
 
-	obj.forEach(
+	obj[currentPage].forEach(
 		({
 			title,
 			coverImage,
@@ -302,7 +303,7 @@ function showAnime(obj) {
 														<h5 class="modal-title white">${nativeTitle}</h5>
 													</div>
 												</div>
-												
+
 												<!-- <button type="button" class="close" data-bs-dismiss="modal"
 													aria-label="Close">
 													<i data-feather="x"></i>
@@ -313,7 +314,6 @@ function showAnime(obj) {
 													<div class="col-12 col-xl-5 mb-3">
 														<img class="rounded img-fluid mx-auto d-block" src="${cover}" alt="${englishTitle}" />
 													</div>
-
 													<div class="col-12 col-xl-7">
 														<ul class="list-group w-100">
 															<li class="list-group-item"><span class="font-extrabold">Synonym:</span> ${synonym}</li>
@@ -333,7 +333,7 @@ function showAnime(obj) {
 													</div>
 												</div>
 											</div>
-											
+
 											<div class="modal-footer">
 												<button type="button" class="btn btn-outline-light"
 													data-bs-dismiss="modal">

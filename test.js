@@ -1,63 +1,214 @@
-// function showPagination(jumlahHalaman) {
-// 	// Pagination
-// 	const pagination = document.querySelector(".pagination");
-// 	pagination.innerHTML = "";
-// 	for (let i = 1; i <= jumlahHalaman; i++) {
-// 		pagination.innerHTML += `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`;
-// 	}
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-// 	// Add active class to the first page
-// 	pagination.firstElementChild.classList.add("active");
+// Here we define our query as a multi-line string
+// Storing it in a separate .graphql/.gql file is also possible
+const query = `
+query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which variables will be used in the query (id)
+	Page (page: $page, perPage: $perPage) {
+		pageInfo {
+		  total
+		  currentPage
+		  lastPage
+		  hasNextPage
+		  perPage
+		}
+		
+		media (id: $id, search: $search, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+			id
+			title {
+			  romaji
+			  english
+			  native
+			}
+			type 
+			description
+			startDate {
+				year
+				month
+				day
+			}
+			duration
+			episodes
+			chapters
+			status
+			bannerImage
+			genres
+			synonyms
+			averageScore
+			bannerImage
+			coverImage {
+				extraLarge
+				large
+				medium
+				color
+			}
+			tags {
+				name
+				description
+				category
+				rank
+			}
+			studios {
+				nodes {
+					name
+					siteUrl
+				}
+			}
+			externalLinks {
+				url
+				site
+			}
+			format
+			source
+		}
+	}
+}
+`;
 
-// 	// Add active class to the clicked page
-// 	pagination.addEventListener("click", function (e) {
-// 		if (e.target.classList.contains("page-link")) {
-// 			pagination.querySelector(".active").classList.remove("active");
-// 			e.target.parentElement.classList.add("active");
-// 		}
-// 	});
+// Define our query variables and values that will be used in the query request
+let searchBtn = document.getElementById("input-keyword");
+let animeList = document.getElementById("anime-list");
+let headerContent = document.querySelector("#header-content");
+let paginationBtn = document.querySelector(".pagination");
 
-// 	// Add previous and next button
-// 	// pagination.innerHTML = `<li class="page-item"><a class="page-link" href="#">Prev</a></li>` + pagination.innerHTML + `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
-// }
+document.getElementById("search-button").addEventListener("click", async function () {
+	getAndShowAnime(1, 6);
+});
 
-function showAnime(obj) {
-	// console.log(obj);
+function showPagination(totalData = 1, perPage, currentPage) {
+	currentPage = parseInt(currentPage);
+	paginationBtn.innerHTML = "";
+	let pagination = Math.floor(totalData / perPage);
+	let paginationContent = `
+		<li class="page-item">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+		</li>`;
+
+	for (let i = 1; i <= pagination; i++) {
+		paginationContent += `
+			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
+		`;
+	}
+
+	paginationContent += `
+		<li class="page-item">
+			<a class="page-link" href="#">Next</a>
+		</li>
+	`;
+
+	paginationBtn.innerHTML = paginationContent;
+}
+
+document.addEventListener("click", function (e) {
+	if (e.target.classList.contains("page-link")) {
+		const childrens = paginationBtn.children;
+		let currentPage = e.target; // e.target.innerHTML
+		const allBtn = document.querySelectorAll(".page-link");
+		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
+			// Remove active
+			for (const child of childrens) {
+				child.firstElementChild.classList.remove("active");
+			}
+			currentPage.classList.add("active");
+			return getAndShowAnime(currentPage.innerHTML, 6);
+		} else if (currentPage.textContent === "Next") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let lastElement = btn.parentElement.parentElement.lastElementChild.previousElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === lastElement) {
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.nextElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) + 1;
+					return getAndShowAnime(currentPage, 6);
+				}
+			}
+		} else if (currentPage.textContent === "Prev") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let firstElement = btn.parentElement.parentElement.firstElementChild.nextElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === firstElement) {
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.previousElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) - 1;
+					return getAndShowAnime(currentPage, 6);
+				}
+			}
+		}
+	}
+});
+
+async function getAndShowAnime(currentPg = 1, perPage = 6) {
+	try {
+		const data = await getAnime(searchBtn.value, currentPg);
+
+		const totalData = data.media.length;
+		const pageNumbers = Math.floor(totalData / perPage);
+
+		let animes = [];
+		for (let i = 0; i < pageNumbers; i++) {
+			animes.push(data.media.splice(i, perPage));
+		}
+
+		showAnime(animes, currentPg);
+		showPagination(totalData, perPage, currentPg);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+// Get the anime's data
+async function getAnime(keyword) {
+	// Define the config we'll need for our Api request
+	return await fetch(`https://graphql.anilist.co`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+		body: JSON.stringify({
+			query: query,
+			variables: {
+				search: keyword,
+				// page: currentPage, // currentPage = 1
+				// perPage: page, // page = 6
+			},
+		}),
+	})
+		// Make the HTTP Api request
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error(response.statusText);
+			}
+			return response.json();
+		})
+		.then((response) => {
+			return response.data.Page;
+		});
+}
+
+function showAnime(obj, currentPage) {
+	currentPage--;
 
 	headerContent.innerHTML = `
-		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>
-
-		<div class="row">
-			<div class="col-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-md-3 pe-0 mb-1 mt-1">
-								<h4 class="text-center text-md-start">Select per page</h4>
-							</div>
-							<div class="col-md-9 ps-0 mb-1 mt-1">
-								<div class="input-group">
-									<select class="form-select" id="select-per-page">
-										<option class="per-page" value="3">3</option>
-										<option class="per-page" value="5" selected>5</option>
-										<option class="per-page" value="10">10</option>
-										<option class="per-page" value="15">15</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		`;
+		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
 
 	let content = "";
+
+	obj = obj[currentPage];
 
 	obj.forEach(
 		({
 			title,
 			coverImage,
+			bannerImage,
 			startDate,
 			id,
 			studios: {
@@ -154,7 +305,7 @@ function showAnime(obj) {
 														<h5 class="modal-title white">${nativeTitle}</h5>
 													</div>
 												</div>
-												
+
 												<!-- <button type="button" class="close" data-bs-dismiss="modal"
 													aria-label="Close">
 													<i data-feather="x"></i>
@@ -165,7 +316,6 @@ function showAnime(obj) {
 													<div class="col-12 col-xl-5 mb-3">
 														<img class="rounded img-fluid mx-auto d-block" src="${cover}" alt="${englishTitle}" />
 													</div>
-
 													<div class="col-12 col-xl-7">
 														<ul class="list-group w-100">
 															<li class="list-group-item"><span class="font-extrabold">Synonym:</span> ${synonym}</li>
@@ -185,7 +335,7 @@ function showAnime(obj) {
 													</div>
 												</div>
 											</div>
-											
+
 											<div class="modal-footer">
 												<button type="button" class="btn btn-outline-light"
 													data-bs-dismiss="modal">
@@ -205,17 +355,86 @@ function showAnime(obj) {
 	animeList.innerHTML = content;
 }
 
-function showPagination(totalData, perPage) {
-	paginationBtn.innerHTML = "";
-	let pagination = Math.ceil(totalData / perPage);
-	let paginationContent = ``;
-	for (let i = 1; i <= pagination; i++) {
-		paginationContent += `
-			<li class="page-item"><a class="page-link ${i === 1 ? "active" : ""}" href="#">${i}</a></li>
-		`;
-	}
-	paginationBtn.innerHTML = paginationContent;
+/*
+Utilities function
+*/
+function isUrlUnknown(url) {
+	return url === "#" ? "disabled" : "";
 }
+
+// Take links that just Official Site, Youtube, Blibli, and Netflix
+function validateSiteLinks(links) {
+	// Just Official Site, Youtube, Blibli, and Netflix
+	let newLinks = links.reduce((acc, link) => {
+		if (link.site === "Official Site" || link.site === "Youtube" || link.site === "Bilibili TV" || link.site === "Netflix") {
+			acc.push(link);
+		}
+		return acc;
+	}, []);
+
+	// Validate if there is no link
+	newLinks = newLinks.length > 0 ? newLinks : [{ site: "unknown", url: "#" }];
+
+	// Concatenate all links
+	return (links = newLinks
+		.map(({ site, url }) => {
+			return `<a href="${url}" target="_blank" class="btn btn-sm btn-primary me-2 d-inline-block ${isUrlUnknown(url)}">${site}</a>`;
+		})
+		.join(""));
+}
+
+function validateDateFormat({ day, month, year }) {
+	day = day ?? "";
+
+	month = months[month - 1] ?? "";
+
+	year = year ?? "";
+
+	return [day, month, year];
+}
+
+function validateDescriptions(desc) {
+	const noBR = desc ? desc.replace("<br>", "").replace("<br><br>", "<br>").replace("(", "[").replace(")", "]") : "unknown";
+	return noBR;
+}
+
+function validateCoverImages({ extraLarge, large, medium, color }) {
+	return extraLarge ?? large ?? medium ?? color ?? "https://via.placeholder.com/300x450.png?text=No+Image";
+}
+
+function validateTitles({ english, romaji, native }) {
+	english = english ?? "NO 'EN' TITLE";
+	romaji = romaji ?? "NO 'ROMAJI' TITLE";
+	native = native ?? "NO 'JP' TITLE";
+	return [english, romaji, native];
+}
+
+function validateGenres(genres) {
+	return genres ? genres.join(", ") : "unknown";
+}
+
+function validateStudioProducer(studioProducer) {
+	return studioProducer?.name ?? "unknown";
+}
+
+function validateNoUnderscore(data) {
+	return data ? data.split("_").join(" ") : "unknown";
+}
+
+function validateSynonyms(synonyms) {
+	return synonyms ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
+}
+
+function validate(data) {
+	return data ?? "unknown";
+}
+
+function validateTags(tags) {
+	return tags ? tags.map((tag) => tag.name).join(", ") : "unknown";
+}
+
 
 push to github
 change cover to banner
+
+

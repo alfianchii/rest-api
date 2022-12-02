@@ -1,75 +1,10 @@
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+// Import validate functions
+import { validate, validateCoverImages, validateDateFormat, validateDescriptions, validateGenres, validateNoUnderscore, validateSiteLinks, validateStudioProducer, validateSynonyms, validateTags, validateTitles } from "./module/validate.js";
 
-// Here we define our query as a multi-line string
-// Storing it in a separate .graphql/.gql file is also possible
-const query = `
-query ($search: String $page: Int, $perPage: Int, $id: Int) { # Define which variables will be used in the query (id)
-	Page (page: $page, perPage: $perPage) {
-		pageInfo {
-		  total
-		  currentPage
-		  lastPage
-		  hasNextPage
-		  perPage
-		}
-		
-		media (id: $id, search: $search, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
-			id
-			title {
-			  romaji
-			  english
-			  native
-			}
-			type 
-			description
-			startDate {
-				year
-				month
-				day
-			}
-			duration
-			episodes
-			chapters
-			status
-			bannerImage
-			genres
-			synonyms
-			averageScore
-			bannerImage
-			coverImage {
-				extraLarge
-				large
-				medium
-				color
-			}
-			tags {
-				name
-				description
-				category
-				rank
-			}
-			studios {
-				nodes {
-					name
-					siteUrl
-				}
-			}
-			externalLinks {
-				url
-				site
-			}
-			format
-			source
-		}
-	}
-}
-`;
+// Import graphql query
+import { default as query } from "./module/query.js";
 
-// Define our query variables and values that will be used in the query request
-let searchBtn = document.getElementById("input-keyword");
-let animeList = document.getElementById("anime-list");
-let headerContent = document.querySelector("#header-content");
-let paginationBtn = document.querySelector(".pagination");
+import { searchBtn, animeList, headerContent, paginationBtn } from "./module/domElements.js";
 
 // When the search button got clicked
 document.getElementById("search-button").addEventListener("click", async function () {
@@ -391,10 +326,13 @@ function showPagination(totalData = 1, perPage, currentPage) {
 Utilities function
 */
 
+// Spinner loading
 function spinner() {
+	// Empty the contents
 	animeList.innerHTML = "";
 	paginationBtn.innerHTML = "";
 
+	// Add spinner
 	animeList.innerHTML = `
 		<div class="text-center">
 			<div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
@@ -402,79 +340,4 @@ function spinner() {
 			</div>
 		</div>
 	`;
-}
-
-function isUrlUnknown(url) {
-	return url === "#" ? "disabled" : "";
-}
-
-// Take links that just Official Site, Youtube, Blibli, and Netflix
-function validateSiteLinks(links) {
-	// Just Official Site, Youtube, Blibli, and Netflix
-	let newLinks = links.reduce((acc, link) => {
-		if (link.site === "Official Site" || link.site === "Youtube" || link.site === "Bilibili TV" || link.site === "Netflix") {
-			acc.push(link);
-		}
-		return acc;
-	}, []);
-
-	// Validate if there is no link
-	newLinks = newLinks.length > 0 ? newLinks : [{ site: "unknown", url: "#" }];
-
-	// Concatenate all links
-	return (links = newLinks
-		.map(({ site, url }) => {
-			return `<a href="${url}" target="_blank" class="btn btn-sm btn-primary me-2 d-inline-block ${isUrlUnknown(url)}">${site}</a>`;
-		})
-		.join(""));
-}
-
-function validateDateFormat({ day, month, year }) {
-	day = day ?? "";
-
-	month = months[month - 1] ?? "";
-
-	year = year ?? "";
-
-	return [day, month, year];
-}
-
-function validateDescriptions(desc) {
-	const noBR = desc ? desc.replace("<br>", "").replace("<br><br>", "<br>").replace("(", "[").replace(")", "]") : "unknown";
-	return noBR;
-}
-
-function validateCoverImages({ extraLarge, large, medium, color }) {
-	return extraLarge ?? large ?? medium ?? color ?? "https://via.placeholder.com/300x450.png?text=No+Image";
-}
-
-function validateTitles({ english, romaji, native }) {
-	english = english ?? "NO 'EN' TITLE";
-	romaji = romaji ?? "NO 'ROMAJI' TITLE";
-	native = native ?? "NO 'JP' TITLE";
-	return [english, romaji, native];
-}
-
-function validateGenres(genres) {
-	return genres ? genres.join(", ") : "unknown";
-}
-
-function validateStudioProducer(studioProducer) {
-	return studioProducer?.name ?? "unknown";
-}
-
-function validateNoUnderscore(data) {
-	return data ? data.split("_").join(" ") : "unknown";
-}
-
-function validateSynonyms(synonyms) {
-	return synonyms ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
-}
-
-function validate(data) {
-	return data ?? "unknown";
-}
-
-function validateTags(tags) {
-	return tags ? tags.map((tag) => tag.name).join(", ") : "unknown";
 }

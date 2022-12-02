@@ -4,6 +4,7 @@ import { validate, validateCoverImages, validateDateFormat, validateDescriptions
 // Import graphql query
 import { default as query } from "./module/query.js";
 
+// Import DOM elements
 import { searchBtn, animeList, headerContent, paginationBtn } from "./module/domElements.js";
 
 // When the search button got clicked
@@ -209,8 +210,10 @@ async function showAnime(currentPage = 1, perPage = 6) {
 					<div class="card">
 						<div class="card-body">
 							<h4 class="card-title mb-4">${englishTitle !== "NO 'EN' TITLE" ? englishTitle : romajiTitle ? romajiTitle : nativeTitle}</h4>
+							<hr>
 							<img src="${cover}" alt="${englishTitle !== "NO 'EN' TITLE" ? englishTitle : romajiTitle ? romajiTitle : nativeTitle}" class="rounded img-fluid w-100">
 							<h5 class="font-extrabold my-3">${year}</h5>
+							
 							<div class="modal-primary me-1 mb-1 d-inline-block">
 								<!-- Button trigger for primary themes modal -->
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal"

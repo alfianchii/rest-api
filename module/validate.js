@@ -65,7 +65,7 @@ function validateNoUnderscore(data) {
 }
 
 function validateSynonyms(synonyms) {
-	return synonyms ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
+	return synonyms.length ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
 }
 
 function validate(data) {

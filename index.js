@@ -128,7 +128,6 @@ async function showAnime(currentPage = 1, perPage = 6) {
 		animes.push(data.media);
 	}
 
-	console.log(animes);
 	// Header content
 	headerContent.innerHTML = `
 		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
@@ -310,7 +309,7 @@ function showPagination(totalData = 1, perPage, currentPage) {
 	// Add child button (ex: 1, 2, 3)
 	for (let i = 1; i <= pagination; i++) {
 		paginationContent += `
-			<li class="page-item"><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
+			<li class="page-item ${currentPage === i ? "disabled" : ""}" ><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
 		`;
 	}
 

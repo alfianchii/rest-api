@@ -120,14 +120,15 @@ async function showAnime(currentPage = 1, perPage = 6) {
 	let animes = [];
 	if (data.media.length >= perPage) {
 		// If more than perPage
-		for (let i = 0; i < pageNumbers; i++) {
-			animes.push(data.media.splice(i, perPage));
+		for (let i = 0; i <= pageNumbers; i++) {
+			animes.push(data.media.splice(i, perPage, data.media[perPage]));
 		}
 	} else {
 		// If less than perPage
 		animes.push(data.media);
 	}
 
+	console.log(animes);
 	// Header content
 	headerContent.innerHTML = `
 		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
@@ -139,7 +140,6 @@ async function showAnime(currentPage = 1, perPage = 6) {
 		({
 			title,
 			coverImage,
-			bannerImage,
 			startDate,
 			id,
 			studios: {
@@ -299,7 +299,7 @@ function showPagination(totalData = 1, perPage, currentPage) {
 	paginationBtn.innerHTML = "";
 
 	// If Math return 0, go return 1 instead nothing. If no, return the result
-	let pagination = Math.floor(totalData / perPage) === 0 ? 1 : Math.floor(totalData / perPage);
+	let pagination = Math.ceil(totalData / perPage) === 0 ? 1 : Math.ceil(totalData / perPage);
 
 	// Add Prev button
 	let paginationContent = `

@@ -17,54 +17,6 @@ document.addEventListener("click", function (e) {
 	paginationClick(e);
 });
 
-// When
-
-function paginationClick(e) {
-	if (e.target.classList.contains("page-link")) {
-		const childrens = paginationBtn.children;
-		let currentPage = e.target; // e.target.innerHTML
-		const allBtn = document.querySelectorAll(".page-link");
-		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
-			// Remove active
-			for (const child of childrens) {
-				child.firstElementChild.classList.remove("active");
-			}
-			currentPage.classList.add("active");
-			return getAndShowAnime(currentPage.innerHTML, 6);
-		} else if (currentPage.textContent === "Next") {
-			for (const btn of allBtn) {
-				if (btn.classList.contains("active")) {
-					let lastElement = btn.parentElement.parentElement.lastElementChild.previousElementSibling.firstChild.innerHTML;
-
-					if (btn.innerHTML === lastElement) {
-						return;
-					}
-
-					btn.classList.remove("active");
-					btn.parentElement.nextElementSibling.firstElementChild.classList.add("active");
-					currentPage = parseInt(btn.textContent) + 1;
-					return getAndShowAnime(currentPage, 6);
-				}
-			}
-		} else if (currentPage.textContent === "Prev") {
-			for (const btn of allBtn) {
-				if (btn.classList.contains("active")) {
-					let firstElement = btn.parentElement.parentElement.firstElementChild.nextElementSibling.firstChild.innerHTML;
-
-					if (btn.innerHTML === firstElement) {
-						return;
-					}
-
-					btn.classList.remove("active");
-					btn.parentElement.previousElementSibling.firstElementChild.classList.add("active");
-					currentPage = parseInt(btn.textContent) - 1;
-					return getAndShowAnime(currentPage, 6);
-				}
-			}
-		}
-	}
-}
-
 function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
 		spinner();
@@ -205,7 +157,7 @@ async function showAnime(currentPage = 1, perPage = 6) {
 			const average = validate(averageScore);
 
 			content += `
-				<div class="col-12 col-lg-4 col-md-6 mb-5">
+				<div class="col-12 col-lg-6 col-md-6 mb-5">
 					<div class="card">
 						<div class="card-body">
 							<h4 class="card-title mb-4">${englishTitle !== "NO 'EN' TITLE" ? englishTitle : romajiTitle ? romajiTitle : nativeTitle}</h4>
@@ -291,6 +243,53 @@ async function showAnime(currentPage = 1, perPage = 6) {
 	showPagination(sumData, perPage, currentPage);
 }
 
+function paginationClick(e) {
+	if (e.target.classList.contains("page-link")) {
+		const childrens = paginationBtn.children;
+		let currentPage = e.target; // e.target.innerHTML
+		const allBtn = document.querySelectorAll(".page-link");
+		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
+			// Remove active
+			for (const child of childrens) {
+				child.firstElementChild.classList.remove("active");
+			}
+			currentPage.classList.add("active");
+			return getAndShowAnime(currentPage.innerHTML, 6);
+		} else if (currentPage.textContent === "Next") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let lastElement = btn.parentElement.parentElement.lastElementChild.previousElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === lastElement) {
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.nextElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) + 1;
+					return getAndShowAnime(currentPage, 6);
+				}
+			}
+		} else if (currentPage.textContent === "Prev") {
+			for (const btn of allBtn) {
+				if (btn.classList.contains("active")) {
+					let firstElement = btn.parentElement.parentElement.firstElementChild.nextElementSibling.firstChild.innerHTML;
+
+					if (btn.innerHTML === firstElement) {
+						// btn.parentElement.previousElementSibling.firstElementChild.classList.add("disabled");
+						return;
+					}
+
+					btn.classList.remove("active");
+					btn.parentElement.previousElementSibling.firstElementChild.classList.add("active");
+					currentPage = parseInt(btn.textContent) - 1;
+					return getAndShowAnime(currentPage, 6);
+				}
+			}
+		}
+	}
+}
+
 function showPagination(totalData = 1, perPage, currentPage) {
 	// Parse the current page to integer
 	currentPage = parseInt(currentPage);
@@ -300,25 +299,32 @@ function showPagination(totalData = 1, perPage, currentPage) {
 	// If Math return 0, go return 1 instead nothing. If no, return the result
 	let pagination = Math.ceil(totalData / perPage) === 0 ? 1 : Math.ceil(totalData / perPage);
 
-	// Add Prev button
-	let paginationContent = `
-		<li class="page-item">
-			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
-		</li>`;
-
 	// Add child button (ex: 1, 2, 3)
+	let paginationContent = "";
 	for (let i = 1; i <= pagination; i++) {
+		// Add Prev button
+		if (i === 1) {
+			// When near Prev, therefore disabled the Prev
+			paginationContent = `
+				<li class="page-item ${currentPage === i ? "disabled" : ""}">
+					<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+				</li>`;
+		}
+
 		paginationContent += `
 			<li class="page-item ${currentPage === i ? "disabled" : ""}" ><a class="page-link ${currentPage === i ? "active" : ""}" href="#">${i}</a></li>
 		`;
-	}
 
-	// Add Next button
-	paginationContent += `
-		<li class="page-item">
-			<a class="page-link" href="#">Next</a>
-		</li>
-	`;
+		// Add Next button
+		if (i === pagination) {
+			// When near Next, therefore disabled the Next
+			paginationContent += `
+				<li class="page-item ${currentPage === i ? "disabled" : ""}">
+					<a class="page-link" href="#">Next</a>
+				</li>
+			`;
+		}
+	}
 
 	// Show pagination
 	paginationBtn.innerHTML = paginationContent;

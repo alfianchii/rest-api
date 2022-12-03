@@ -432,9 +432,3 @@ function validate(data) {
 function validateTags(tags) {
 	return tags ? tags.map((tag) => tag.name).join(", ") : "unknown";
 }
-
-
-push to github
-change cover to banner
-
-

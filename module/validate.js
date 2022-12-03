@@ -1,5 +1,15 @@
-export { validate, validateCoverImages, validateDateFormat, validateDescriptions, validateGenres, validateNoUnderscore, validateSiteLinks, validateStudioProducer, validateSynonyms, validateTags, validateTitles };
+export { validate, validateCoverImages, validateDateFormat, validateDescriptions, validateGenres, validateNoUnderscore, validateSiteLinks, inputKeyword, validateStudioProducer, validateSynonyms, validateTags, validateTitles };
+
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function inputKeyword(keyword, animeContent) {
+	if (keyword === "") {
+		// fade(movieList);
+		animeContent.innerHTML = `<h4 class="text-center">Type in the movie you want to search for first~!! :></h4>`;
+		throw new Error("Input gak boleh kosong!!>_<");
+	}
+	return keyword;
+}
 
 function isUrlUnknown(url) {
 	return url === "#" ? "disabled" : "";

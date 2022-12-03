@@ -1,11 +1,24 @@
 // Import validate functions
-import { validate, validateCoverImages, validateDateFormat, validateDescriptions, validateGenres, validateNoUnderscore, validateSiteLinks, validateStudioProducer, validateSynonyms, validateTags, validateTitles } from "./module/validate.js";
+import {
+	validate,
+	validateCoverImages,
+	validateDateFormat,
+	validateDescriptions,
+	validateGenres,
+	validateNoUnderscore,
+	validateSiteLinks,
+	validateStudioProducer,
+	validateSynonyms,
+	validateTags,
+	validateTitles,
+	inputKeyword,
+} from "./module/validate.js";
+
+// Import DOM elements
+import { searchBtn, animeList, headerContent, paginationBtn, allContent } from "./module/domElements.js";
 
 // Import graphql query
 import { default as query } from "./module/query.js";
-
-// Import DOM elements
-import { searchBtn, animeList, headerContent, paginationBtn } from "./module/domElements.js";
 
 // When the search button got clicked
 document.getElementById("search-button").addEventListener("click", async function () {
@@ -19,10 +32,11 @@ document.addEventListener("click", function (e) {
 
 function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
-		spinner();
-
-		showAnime(currentPg, perPage);
+		const searchButtonValue = inputKeyword(searchBtn.value, headerContent);
+		showAnime(currentPg, perPage, searchButtonValue);
 	} catch (error) {
+		animeList.innerHTML = "";
+		paginationBtn.innerHTML = "";
 		console.log(error);
 	}
 }
@@ -58,9 +72,10 @@ async function getAnime(keyword) {
 }
 
 // Show anime and pagination
-async function showAnime(currentPage = 1, perPage = 6) {
+async function showAnime(currentPage = 1, perPage = 6, keyword) {
 	// Get the anime's data
-	const data = await getAnime(searchBtn.value, currentPage);
+	spinner();
+	const data = await getAnime(keyword, currentPage);
 
 	// Take the sum of anime data
 	const sumData = data.media.length;
@@ -76,13 +91,13 @@ async function showAnime(currentPage = 1, perPage = 6) {
 			animes.push(data.media.splice(i, perPage, data.media[perPage]));
 		}
 	} else {
-		// If less than perPage
+		// If less than perPage (1 page)
 		animes.push(data.media);
 	}
 
 	// Header content
 	headerContent.innerHTML = `
-		<h4 class="mb-5 text-center">Search result of '${searchBtn.value}' :</h4>`;
+		<h4 class="text-center">Search result of '${searchBtn.value}' :</h4>`;
 
 	// Show anime's data
 	let content = "";

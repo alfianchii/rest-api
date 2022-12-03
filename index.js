@@ -143,7 +143,6 @@ async function showAnime(currentPage = 1, perPage = 6, keyword) {
 
 			// Validate genres if null/undefined
 			const genre = validateGenres(genres);
-			console.log(genres);
 
 			// Validate studio if null/undefined
 			const studioProducer = validateStudioProducer(studio1);

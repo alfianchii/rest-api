@@ -26,7 +26,7 @@ function validateSiteLinks(links) {
 	}, []);
 
 	// Validate if there is no link
-	newLinks = newLinks.length > 0 ? newLinks : [{ site: "unknown", url: "#" }];
+	newLinks = newLinks.length > 0 ? newLinks : [{ site: "N/A", url: "#" }];
 
 	// Concatenate all links
 	return (links = newLinks
@@ -47,7 +47,7 @@ function validateDateFormat({ day, month, year }) {
 }
 
 function validateDescriptions(desc) {
-	const noBR = desc ? desc.replace("<br>", "").replace("<br><br>", "<br>").replace("(", "[").replace(")", "]") : "unknown";
+	const noBR = desc ? desc.replace("<br>", "").replace("<br><br>", "<br>").replace("(", "[").replace(")", "]") : "N/A";
 	return noBR;
 }
 
@@ -63,25 +63,25 @@ function validateTitles({ english, romaji, native }) {
 }
 
 function validateGenres(genres) {
-	return genres.length ? genres.join(", ") : "unknown";
+	return genres.length ? genres.join(", ") : "N/A";
 }
 
 function validateStudioProducer(studioProducer) {
-	return studioProducer?.name ?? "unknown";
+	return studioProducer?.name ?? "N/A";
 }
 
 function validateNoUnderscore(data) {
-	return data ? data.split("_").join(" ") : "unknown";
+	return data ? data.split("_").join(" ") : "N/A";
 }
 
 function validateSynonyms(synonyms) {
-	return synonyms.length ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "unknown";
+	return synonyms.length ? synonyms.map((synonym) => synonym).join(`<span class="font-extrabold"> || </span>`) : "N/A";
 }
 
 function validate(data) {
-	return data ?? "unknown";
+	return data ?? "N/A";
 }
 
 function validateTags(tags) {
-	return tags.length ? tags.map((tag) => tag.name).join(", ") : "unknown";
+	return tags.length ? tags.map((tag) => tag.name).join(", ") : "N/A";
 }

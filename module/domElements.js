@@ -1,4 +1,4 @@
-export { searchBtn, animeList, headerContent, paginationBtn, allContent, toastContent, toastBtn };
+export { searchBtn, animeList, headerContent, paginationBtn, allContent, toastContent, toastBtn, inputSearch };
 
 // DOM elements
 let searchBtn = document.getElementById("input-keyword");
@@ -8,3 +8,4 @@ let paginationBtn = document.querySelector(".pagination");
 let allContent = document.querySelector("#all-content");
 let toastContent = document.getElementById("liveToast");
 let toastBtn = document.getElementById("liveToastBtn");
+let inputSearch = document.getElementById("input-keyword");

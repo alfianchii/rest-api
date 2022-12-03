@@ -19,7 +19,7 @@ import {
 } from "../module/validate.js";
 
 // Import DOM elements
-import { searchBtn, animeList, headerContent, paginationBtn, toastContent, toastBtn } from "../module/domElements.js";
+import { searchBtn, animeList, headerContent, paginationBtn, toastContent, toastBtn, inputSearch } from "../module/domElements.js";
 
 // Import graphql query
 import { default as query } from "../module/query.js";
@@ -32,6 +32,13 @@ document.getElementById("search-button").addEventListener("click", async functio
 // When pagination got clicked (prev, numbers, next)
 document.addEventListener("click", function (e) {
 	paginationClick(e);
+});
+
+// When enter was clicked in search button
+inputSearch.addEventListener("keyup", function (e) {
+	if (e.key === "Enter") {
+		getAndShowAnime(1, 6);
+	}
 });
 
 async function getAndShowAnime(currentPg = 1, perPage = 6) {

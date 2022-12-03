@@ -108,7 +108,7 @@ function validateAnime(data) {
 	if (data.media.length === 0) {
 		fade(headerContent);
 		animeList.innerHTML = "";
-		headerContent.innerHTML = `<h4 class="text-center">Anime not found :(</h4>`;
+		headerContent.innerHTML = `<h4 class="text-center">Anime was not found :(</h4>`;
 		throw new Error("The anime you are looking for was not found. Please search for something else :3");
 	}
 	return data;

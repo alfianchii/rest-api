@@ -19,7 +19,7 @@ import {
 } from "../module/validate.js";
 
 // Import DOM elements
-import { searchBtn, animeList, headerContent, paginationBtn, allContent } from "../module/domElements.js";
+import { searchBtn, animeList, headerContent, paginationBtn, toastContent, toastBtn } from "../module/domElements.js";
 
 // Import graphql query
 import { default as query } from "../module/query.js";
@@ -34,14 +34,21 @@ document.addEventListener("click", function (e) {
 	paginationClick(e);
 });
 
-function getAndShowAnime(currentPg = 1, perPage = 6) {
+async function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
-		const searchButtonValue = inputKeyword(searchBtn.value);
-		showAnime(currentPg, perPage, searchButtonValue);
+		const keyword = inputKeyword(searchBtn.value);
+		// Loading when retrieving data
+		spinner(headerContent, animeList, paginationBtn);
+
+		// Get the anime's data
+		const data = validateAnime(await getAnime(keyword, currentPg));
+
+		// Then show
+		showAnime(data, currentPg, perPage);
 	} catch (error) {
-		animeList.innerHTML = "";
-		paginationBtn.innerHTML = "";
-		console.log(error);
+		// animeList.innerHTML = "";
+		// paginationBtn.innerHTML = "";
+		toastClick(toastContent, toastBtn, error);
 	}
 }
 
@@ -65,6 +72,9 @@ async function getAnime(keyword) {
 	})
 		// Make the HTTP Api request
 		.then((response) => {
+			if (!response.ok && response.statusText == "") {
+				throw new Error("there was an error in the query.");
+			}
 			if (!response.ok) {
 				throw new Error(response.statusText);
 			}
@@ -76,14 +86,7 @@ async function getAnime(keyword) {
 }
 
 // Show anime and pagination
-async function showAnime(currentPage = 1, perPage = 6, keyword) {
-	// Loading when retrieving data
-	spinner();
-
-	// Get the anime's data
-	const data = validateAnime(await getAnime(keyword, currentPage));
-	console.log(data);
-
+function showAnime(data, currentPage = 1, perPage = 6) {
 	// Take the sum of anime data
 	const sumData = data.media.length;
 
@@ -357,13 +360,16 @@ Utilities function
 */
 
 // Spinner loading
-function spinner() {
+function spinner(header, list, pagination) {
 	// Empty the contents
-	animeList.innerHTML = "";
-	paginationBtn.innerHTML = "";
+	list.innerHTML = "";
+	pagination.innerHTML = "";
+	header.innerHTML = "";
 
+	// Add text
+	header.innerHTML = `<h4 class="text-center">Searching ...</h4>`;
 	// Add spinner
-	animeList.innerHTML = `
+	list.innerHTML = `
 		<div class="text-center">
 			<div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
 				<span class="visually-hidden">Loading...</span>
@@ -377,4 +383,19 @@ function fade(element) {
 	setTimeout(() => {
 		element.classList.replace("hide", "show");
 	}, 150);
+}
+
+function toastClick(toastContent, toastBtn, message) {
+	toastContent.innerHTML = `
+		<div class="toast-header">
+			<svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+				<rect width="100%" height="100%" fill="#007aff"></rect>
+			</svg>
+			<strong class="me-auto">Announcement</strong>
+			<!-- <small>11 mins ago</small> -->
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">${message}</div>`;
+
+	toastBtn.click();
 }

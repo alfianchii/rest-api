@@ -63,7 +63,7 @@ function validateTitles({ english, romaji, native }) {
 }
 
 function validateGenres(genres) {
-	return genres ? genres.join(", ") : "unknown";
+	return genres.length ? genres.join(", ") : "unknown";
 }
 
 function validateStudioProducer(studioProducer) {

@@ -1,13 +1,29 @@
-export { validate, validateCoverImages, validateDateFormat, validateDescriptions, validateGenres, validateNoUnderscore, validateSiteLinks, inputKeyword, validateStudioProducer, validateSynonyms, validateTags, validateTitles };
+export {
+	validate,
+	validateCoverImages,
+	validateDateFormat,
+	validateDescriptions,
+	validateGenres,
+	validateNoUnderscore,
+	validateSiteLinks,
+	inputKeyword,
+	validateStudioProducer,
+	validateSynonyms,
+	validateTags,
+	validateTitles,
+	validateAnime,
+};
 
 import { fade } from "../anime/index.js";
 
+import { headerContent, animeList } from "./domElements.js";
+
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function inputKeyword(keyword, animeContent) {
+function inputKeyword(keyword) {
 	if (keyword === "") {
-		fade(animeContent);
-		animeContent.innerHTML = `<h4 class="text-center">Type in the movie you want to search for first please~!! :></h4>`;
+		fade(headerContent);
+		headerContent.innerHTML = `<h4 class="text-center">Type in the movie you want to search for first please~!! :></h4>`;
 		throw new Error("Input cannot be empty!!>_<");
 	}
 	return keyword;
@@ -86,4 +102,14 @@ function validate(data) {
 
 function validateTags(tags) {
 	return tags.length ? tags.map((tag) => tag.name).join(", ") : "N/A";
+}
+
+function validateAnime(data) {
+	if (data.media.length === 0) {
+		fade(headerContent);
+		animeList.innerHTML = "";
+		headerContent.innerHTML = `<h4 class="text-center">Anime not found :(</h4>`;
+		throw new Error("The anime you are looking for was not found. Please search for something else :3");
+	}
+	return data;
 }

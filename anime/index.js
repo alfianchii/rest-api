@@ -1,3 +1,6 @@
+// Export
+export { fade, spinner };
+
 // Import validate functions
 import {
 	validate,
@@ -12,6 +15,7 @@ import {
 	validateTags,
 	validateTitles,
 	inputKeyword,
+	validateAnime,
 } from "../module/validate.js";
 
 // Import DOM elements
@@ -32,7 +36,7 @@ document.addEventListener("click", function (e) {
 
 function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
-		const searchButtonValue = inputKeyword(searchBtn.value, headerContent);
+		const searchButtonValue = inputKeyword(searchBtn.value);
 		showAnime(currentPg, perPage, searchButtonValue);
 	} catch (error) {
 		animeList.innerHTML = "";
@@ -73,9 +77,12 @@ async function getAnime(keyword) {
 
 // Show anime and pagination
 async function showAnime(currentPage = 1, perPage = 6, keyword) {
-	// Get the anime's data
+	// Loading when retrieving data
 	spinner();
-	const data = await getAnime(keyword, currentPage);
+
+	// Get the anime's data
+	const data = validateAnime(await getAnime(keyword, currentPage));
+	console.log(data);
 
 	// Take the sum of anime data
 	const sumData = data.media.length;
@@ -365,7 +372,7 @@ function spinner() {
 	`;
 }
 
-export function fade(element) {
+function fade(element) {
 	element.classList.replace("show", "hide");
 	setTimeout(() => {
 		element.classList.replace("hide", "show");

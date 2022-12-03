@@ -8,7 +8,7 @@ function inputKeyword(keyword, animeContent) {
 	if (keyword === "") {
 		fade(animeContent);
 		animeContent.innerHTML = `<h4 class="text-center">Type in the movie you want to search for first please~!! :></h4>`;
-		throw new Error("Input gak boleh kosong!!>_<");
+		throw new Error("Input cannot be empty!!>_<");
 	}
 	return keyword;
 }

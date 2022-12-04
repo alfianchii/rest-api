@@ -11,7 +11,7 @@ class Utilities {
 		if (input === "") {
 			this.fade(headerContent);
 			headerContent.innerHTML = `<h4 class="text-center">Type in the ${type} you want to search for first please~!! :></h4>`;
-			throw new Error("Input cannot be empty!!>_<");
+			throw new Error("Input cannot be empty!! >_<");
 		}
 		return input;
 	}

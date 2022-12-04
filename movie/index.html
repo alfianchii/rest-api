@@ -19,9 +19,11 @@
 	</head>
 
 	<body>
+		<!-- Base -->
 		<script src="../assets/js/initTheme.js"></script>
 
 		<div id="app">
+			<!-- Start navbar -->
 			<div id="sidebar" class="active">
 				<div class="sidebar-wrapper active">
 					<div class="sidebar-header position-relative">
@@ -97,6 +99,8 @@
 					</div>
 				</div>
 			</div>
+			<!-- End navbar -->
+
 			<div id="main">
 				<header class="mb-3">
 					<a href="#" class="burger-btn d-block d-xl-none">
@@ -104,6 +108,7 @@
 					</a>
 				</header>
 
+				<!-- Made with -->
 				<div class="mb-5 text-center text-xl-start">
 					<h3 class="font-extrabold">Movie</h3>
 					<span class="mb-3 d-inline-block h6 font-monospace font-weight-light text-muted"
@@ -116,10 +121,12 @@
 				</div>
 
 				<div class="page-content">
+					<!-- Start main content -->
 					<section class="row">
 						<div class="col-12">
 							<div class="card">
 								<div class="card-body" id="all-content">
+									<!-- Search input -->
 									<div class="row">
 										<div class="col-md-3 pe-0 mb-1 mt-1">
 											<h4 class="text-center text-md-start">Search Movie</h4>
@@ -132,6 +139,7 @@
 										</div>
 									</div>
 
+									<!-- Header content -->
 									<div class="row">
 										<div class="col-12 my-5">
 											<div id="header-content-movie" class="fade show">
@@ -140,6 +148,7 @@
 										</div>
 									</div>
 
+									<!-- List content -->
 									<div class="row">
 										<div class="col-12">
 											<!-- Pagination -->
@@ -147,6 +156,7 @@
 										</div>
 									</div>
 
+									<!-- Pagination -->
 									<div class="row">
 										<div class="col">
 											<nav aria-label="Page navigation example">
@@ -158,22 +168,13 @@
 							</div>
 						</div>
 					</section>
+					<!-- End main content -->
 
 					<!-- Toast -->
 					<div class="">
 						<button type="button" class="d-none" id="liveToastBtn">Show live toast</button>
 						<div class="toast-container position-fixed bottom-0 end-0 p-3">
-							<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-								<div class="toast-header">
-									<svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-										<rect width="100%" height="100%" fill="#007aff"></rect>
-									</svg>
-									<strong class="me-auto">Bootstrap</strong>
-									<small>11 mins ago</small>
-									<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-								</div>
-								<div class="toast-body">Hello, world! This is a toast message.</div>
-							</div>
+							<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
 						</div>
 					</div>
 					<!-- End Toast -->
@@ -181,15 +182,14 @@
 			</div>
 		</div>
 
+		<!-- Bootstrap JS -->
 		<script src="../assets/js/bootstrap.js"></script>
 		<script src="../assets/js/app.js"></script>
 
-		<!-- Need: Apexcharts -->
-		<!-- <script src="../assets/extensions/apexcharts/apexcharts.min.js"></script>
-		<script src="../assets/js/pages/dashboard.js"></script> -->
-		<!-- <script src="../assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-		<script src="../assets/js/pages/simple-datatables.js"></script> -->
+		<!-- Need: Toast -->
 		<script src="../assets/js/pages/component-toasts.js"></script>
+
+		<!-- My script -->
 		<script src="./js/index.js" type="module"></script>
 	</body>
 </html>

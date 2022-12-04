@@ -240,8 +240,8 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 															<li class="list-group-item"><span class="font-extrabold">Genre:</span> ${genre}</li>
 															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>
 															<li class="list-group-item"><span class="font-extrabold">Duration:</span> ${time} minute(s)</li>
-															<li class="list-group-item"><span class="font-extrabold me-1">Tag:</span> ${tag}</li>
-															<li class="list-group-item"><span class="font-extrabold me-1">Average Score:</span> ${average}</li>
+															<li class="list-group-item"><span class="font-extrabold">Tag:</span> ${tag}</li>
+															<li class="list-group-item"><span class="font-extrabold">Average Score:</span> ${average}</li>
 															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> ${externalLink}</li>
 														</ul>
 													</div>

@@ -7,13 +7,13 @@ import Validate from "../module/validate.js";
 const Valid = new Validate();
 
 // DOM elements
-let searchBtn = document.getElementById("input-keyword");
-let animeList = document.getElementById("anime-list");
-let headerContent = document.querySelector("#header-content");
-let paginationBtn = document.querySelector(".pagination");
-let toastContent = document.getElementById("liveToast");
-let toastBtn = document.getElementById("liveToastBtn");
-let inputSearch = document.getElementById("input-keyword");
+const searchBtn = document.getElementById("input-keyword");
+const animeList = document.getElementById("anime-list");
+const headerContent = document.querySelector("#header-content");
+const paginationBtn = document.querySelector(".pagination");
+const toastContent = document.getElementById("liveToast");
+const toastBtn = document.getElementById("liveToastBtn");
+const inputSearch = document.getElementById("input-keyword");
 
 // Import graphql query
 import { default as query } from "../module/query.js";

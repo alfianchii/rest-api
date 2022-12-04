@@ -5,7 +5,7 @@ variable because it will be undefined.
 So I have to use the prototype to call 
 the function. PLEASE HELPPP TwT
 */
-import Utilities from "../module/utilities.js";
+import Utilities from "../../module/utilities.js";
 
 // DOM elements
 const movieList = document.getElementById("movie-list");

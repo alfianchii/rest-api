@@ -1,9 +1,9 @@
 // Import some utilities
-import Utilities from "../module/utilities.js";
+import Utilities from "../../module/utilities.js";
 const Utils = new Utilities();
 
 // Import validate functions
-import Validate from "../module/validate.js";
+import Validate from "../../module/validate.js";
 const Valid = new Validate();
 
 // DOM elements
@@ -16,7 +16,7 @@ const toastBtn = document.getElementById("liveToastBtn");
 const inputSearch = document.getElementById("input-keyword");
 
 // Import graphql query
-import { default as query } from "../module/query.js";
+import { default as query } from "../../module/query.js";
 
 // When the search button got clicked
 document.getElementById("search-button").addEventListener("click", async function () {

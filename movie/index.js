@@ -142,17 +142,17 @@ function updateUI(movieDetails) {
 														<img src="${mv.Poster}" alt="">
 													</div>
 													<ul class="list-group w-100">
-														<li class="list-group-item">Released: ${mv.Released}</li>
-														<li class="list-group-item">Runtime: ${mv.Runtime}</li>
-														<li class="list-group-item">Type: ${mv.Type}</li>
-														<li class="list-group-item">Genre: ${mv.Genre}</li>
-														<li class="list-group-item">Director: ${mv.Director}</li>
-														<li class="list-group-item">Writer: ${mv.Writer}</li>
-														<li class="list-group-item">Actors: ${mv.Actors}</li>
-														<li class="list-group-item">Language: ${mv.Language}</li>
-														<li class="list-group-item">Country: ${mv.Country}</li>
-														<li class="list-group-item">Plot: ${mv.Plot}</li>
-														<li class="list-group-item">Rating: ${mv.imdbRating} (based on IMDB's rating)</li>
+														<li class="list-group-item"><span class="font-extrabold">Released: </span>${mv.Released}</li>
+														<li class="list-group-item"><span class="font-extrabold">Runtime: </span>${mv.Runtime}</li>
+														<li class="list-group-item"><span class="font-extrabold">Type: </span>${mv.Type}</li>
+														<li class="list-group-item"><span class="font-extrabold">Genre: </span>${mv.Genre}</li>
+														<li class="list-group-item"><span class="font-extrabold">Director: </span>${mv.Director}</li>
+														<li class="list-group-item"><span class="font-extrabold">Writer: </span>${mv.Writer}</li>
+														<li class="list-group-item"><span class="font-extrabold">Actors: </span>${mv.Actors}</li>
+														<li class="list-group-item"><span class="font-extrabold">Language: </span>${mv.Language}</li>
+														<li class="list-group-item"><span class="font-extrabold">Country: </span>${mv.Country}</li>
+														<li class="list-group-item"><span class="font-extrabold">Plot: </span>${mv.Plot}</li>
+														<li class="list-group-item"><span class="font-extrabold">Rating: </span>${mv.imdbRating} (based on IMDB's rating)</li>
 													</ul>
 												</div>
 											</div>

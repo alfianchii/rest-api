@@ -230,19 +230,19 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 													</div>
 													<div class="col-12 col-xl-7">
 														<ul class="list-group w-100">
-															<li class="list-group-item"><span class="font-extrabold">Synonym:</span> ${synonym}</li>
-															<li class="list-group-item"><span class="font-extrabold">Description:</span> ${desc}</li>
-															<li class="list-group-item"><span class="font-extrabold">Released:</span> ${day} ${month} ${year}</li>
-															<li class="list-group-item"><span class="font-extrabold">Studio:</span> ${studioProducer}</li>
-															<li class="list-group-item"><span class="font-extrabold">Type:</span> ${type}</li>
-															<li class="list-group-item"><span class="font-extrabold">Adaptation:</span> ${adaptation}</li>
-															<li class="list-group-item"><span class="font-extrabold">Status:</span> ${stat}</li>
-															<li class="list-group-item"><span class="font-extrabold">Genre:</span> ${genre}</li>
-															<li class="list-group-item"><span class="font-extrabold">Episode:</span> ${episode} episode(s)</li>
-															<li class="list-group-item"><span class="font-extrabold">Duration:</span> ${time} minute(s)</li>
-															<li class="list-group-item"><span class="font-extrabold">Tag:</span> ${tag}</li>
-															<li class="list-group-item"><span class="font-extrabold">Average Score:</span> ${average}</li>
-															<li class="list-group-item"><span class="font-extrabold me-1">Site:</span> ${externalLink}</li>
+															<li class="list-group-item"><span class="font-extrabold">Synonym: </span>${synonym}</li>
+															<li class="list-group-item"><span class="font-extrabold">Description: </span>${desc}</li>
+															<li class="list-group-item"><span class="font-extrabold">Released: </span>${day} ${month} ${year}</li>
+															<li class="list-group-item"><span class="font-extrabold">Studio: </span>${studioProducer}</li>
+															<li class="list-group-item"><span class="font-extrabold">Type: </span>${type}</li>
+															<li class="list-group-item"><span class="font-extrabold">Adaptation: </span>${adaptation}</li>
+															<li class="list-group-item"><span class="font-extrabold">Status: </span>${stat}</li>
+															<li class="list-group-item"><span class="font-extrabold">Genre: </span>${genre}</li>
+															<li class="list-group-item"><span class="font-extrabold">Episode: </span>${episode} episode(s)</li>
+															<li class="list-group-item"><span class="font-extrabold">Duration: </span>${time} minute(s)</li>
+															<li class="list-group-item"><span class="font-extrabold">Tag: </span>${tag}</li>
+															<li class="list-group-item"><span class="font-extrabold">Average Score: </span>${average}</li>
+															<li class="list-group-item"><span class="font-extrabold me-1">Site: </span>${externalLink}</li>
 														</ul>
 													</div>
 												</div>

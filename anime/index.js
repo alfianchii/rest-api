@@ -4,6 +4,7 @@ const Utils = new Utilities();
 
 // Import validate functions
 import Validate from "../module/validate.js";
+const Valid = new Validate();
 
 // DOM elements
 let searchBtn = document.getElementById("input-keyword");
@@ -43,7 +44,7 @@ async function getAndShowAnime(currentPg = 1, perPage = 6) {
 		Utils.spinner(headerContent, animeList, paginationBtn);
 
 		// Get the anime's data then validate it
-		const data = Validate.anime(await getAnime(keyword, currentPg), headerContent, animeList);
+		const data = Valid.anime(await getAnime(keyword, currentPg), headerContent, animeList);
 
 		// Then show
 		showAnime(data, currentPg, perPage);
@@ -139,49 +140,49 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 			const animeId = id;
 
 			// Validate language title and set it to romaji if it's not available in english. If it's not available in romaji, set it to native.
-			const [englishTitle, romajiTitle, nativeTitle] = Validate.titles(title);
+			const [englishTitle, romajiTitle, nativeTitle] = Valid.titles(title);
 
 			// Validate if the anime have no a cover image
-			const cover = Validate.coverImages(coverImage);
+			const cover = Valid.coverImages(coverImage);
 
 			// Validate description if null/undefined and remove the source
-			const desc = Validate.descriptions(description);
+			const desc = Valid.descriptions(description);
 
 			// Validate released date if null/undefined
-			const [day, month, year] = Validate.dateFormat(startDate);
+			const [day, month, year] = Valid.dateFormat(startDate);
 
 			// Validate format if null/undefined
-			const type = Validate.noUnderscore(format);
+			const type = Valid.noUnderscore(format);
 
 			// Validate genres if null/undefined
-			const genre = Validate.genres(genres);
+			const genre = Valid.genres(genres);
 
 			// Validate studio if null/undefined
-			const studioProducer = Validate.studioProducer(studio1);
+			const studioProducer = Valid.studioProducer(studio1);
 
 			// Validate status if null/undefined and seperate it to 2 words (no underscore)
-			const stat = Validate.noUnderscore(status);
+			const stat = Valid.noUnderscore(status);
 
 			// Validate episodes if null/undefined
-			const episode = Validate.validate(episodes);
+			const episode = Valid.validate(episodes);
 
 			// Validate duration if null/undefined
-			const time = Validate.validate(duration);
+			const time = Valid.validate(duration);
 
 			// Validate the links that just Official Site, Youtube, Blibli, and Netflix
-			const externalLink = Validate.siteLinks(externalLinks);
+			const externalLink = Valid.siteLinks(externalLinks);
 
 			// Validate synonyms if null/undefined
-			const synonym = Validate.synonyms(synonyms);
+			const synonym = Valid.synonyms(synonyms);
 
 			// Validate tags if null/undefined
-			const tag = Validate.tags(tags);
+			const tag = Valid.tags(tags);
 
 			// Validate adaptation if null/undefined and seperate it to 2 words (no underscore)
-			const adaptation = Validate.noUnderscore(source);
+			const adaptation = Valid.noUnderscore(source);
 
 			// Validate score if null/undefined
-			const average = Validate.validate(averageScore);
+			const average = Valid.validate(averageScore);
 
 			content += `
 				<div class="col-12 col-lg-6 col-md-6 mb-5">

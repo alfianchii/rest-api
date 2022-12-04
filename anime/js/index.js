@@ -6,6 +6,13 @@ const Utils = new Utilities();
 import Validate from "../../module/validate.js";
 const Valid = new Validate();
 
+// Import error handling
+import ErrorHandling from "../../module/errorHandling.js";
+const Err = new ErrorHandling();
+
+// Import graphql query
+import { default as query } from "../../module/query.js";
+
 // DOM elements
 const searchBtn = document.getElementById("input-keyword");
 const animeList = document.getElementById("anime-list");
@@ -14,9 +21,6 @@ const paginationBtn = document.querySelector(".pagination");
 const toastContent = document.getElementById("liveToast");
 const toastBtn = document.getElementById("liveToastBtn");
 const inputSearch = document.getElementById("input-keyword");
-
-// Import graphql query
-import { default as query } from "../../module/query.js";
 
 // When the search button got clicked
 document.getElementById("search-button").addEventListener("click", async function () {
@@ -65,7 +69,7 @@ async function getAnime(keyword) {
 			Accept: "application/json",
 		},
 		body: JSON.stringify({
-			query: query,
+			// query: query,
 			variables: {
 				search: keyword,
 				// page: currentPage, // currentPage = 1
@@ -75,15 +79,15 @@ async function getAnime(keyword) {
 	})
 		// Make the HTTP Api request
 		.then((response) => {
-			if (!response.ok && response.statusText == "") {
-				throw new Error("there was an error in the query.");
-			}
-			if (!response.ok) {
-				throw new Error(response.statusText);
-			}
 			return response.json();
 		})
 		.then((response) => {
+			console.log(response);
+			// If the response was contains errors
+			if (response.errors) {
+				Err.handling(headerContent, animeList, response.errors[0].message);
+			}
+
 			return response.data.Page;
 		});
 }

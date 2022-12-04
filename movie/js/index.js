@@ -8,6 +8,13 @@ the function. PLEASE HELPPP TwT
 // Importing Utilities
 import Utilities from "../../module/utilities.js";
 
+/*
+I CAN'T INSTANCED THIS ONE THO :(
+*/
+
+// Importing Error Handling
+import errorHandling from "../../module/errorHandling.js";
+
 // DOM elements
 const movieList = document.getElementById("movie-list");
 const toastContent = document.getElementById("liveToast");
@@ -33,7 +40,6 @@ document.querySelector("#input-keyword-movie").addEventListener("keyup", functio
 /*
 Cores function: get and show movie
 */
-
 // Get and show movie
 async function getAndShowMovie() {
 	try {
@@ -61,7 +67,7 @@ async function getMovie(keyword) {
 		.then(async (response) => {
 			// If the response was false
 			if (response.Response === "False") {
-				errorHandling(headerContent, movieList, response.Error);
+				errorHandling.prototype.handling(headerContent, movieList, response.Error);
 			}
 
 			let movies = response.Search;
@@ -82,7 +88,7 @@ async function getMovieDetail(imdbID) {
 			.then((response) => response.json())
 			.then((response) => {
 				if (response.Response === "False") {
-					errorHandling(headerContent, movieList, response.Error);
+					errorHandling.prototype.handling(headerContent, movieList, response.Error);
 				}
 				return response;
 			});
@@ -165,78 +171,4 @@ function updateUI(movieDetails) {
 	});
 
 	movieList.innerHTML = content;
-}
-
-// Error handling when the API was experienced weirdness
-function errorHandling(header, list, error) {
-	// If error was "Movie not found!"
-	if (error === "Movie not found!") {
-		showErrorHandling(header, list, "Movie not found :(", "The movie you are looking for was not found. Please search for something else :3");
-	}
-
-	// If error was "Too many results."
-	else if (error === "Too many results.") {
-		showErrorHandling(header, list, "Too many results :(", "Too many results; please search for something else :3");
-	}
-
-	// If error was "No API key provided."
-	else if (error === "No API key provided.") {
-		showErrorHandling(header, list, "No API key provided :(", "No API key provided; please contact the developer :3");
-	}
-
-	// If error was "Invalid API key!"
-	else if (error === "Invalid API key!") {
-		showErrorHandling(header, list, "Invalid API key :(", "Invalid API key; please contact the developer :3");
-	}
-
-	// If error was "Request limit reached!"
-	else if (error === "Request limit reached!") {
-		showErrorHandling(header, list, "Request limit reached :(", "Request limit reached; please try again after 24 hours :3");
-	}
-
-	// If error was "Something went wrong."
-	else if (error === "Something went wrong.") {
-		showErrorHandling(header, list, "Something went wrong :(", "Something went wrong; please try again later :3");
-	}
-
-	// If error was "Service unavailable."
-	else if (error === "Service unavailable.") {
-		showErrorHandling(header, list, "Service unavailable :(", "Service unavailable; please try again later :3");
-	}
-
-	// If error was "Incorrect IMDb ID."
-	else if (error === "Incorrect IMDb ID.") {
-		showErrorHandling(header, list, "Incorrect IMDb ID :(", "Incorrect IMDb ID or input search; please check your input or the fetch url :3");
-	}
-
-	// If error was "Internal server error."
-	else if (error === "Internal server error.") {
-		showErrorHandling(header, list, "Internal server error :(", "Internal server error; please try again later :3");
-	}
-	// If error was "Something bad happened."
-	else if (error === "Something bad happened.") {
-		showErrorHandling(header, list, "Something bad happened :(", "Something bad happened; please try again later :3");
-	}
-	// If error was "The resource you requested could not be found."
-	else if (error === "The resource you requested could not be found.") {
-		showErrorHandling(header, list, "The resource you requested could not be found :(", "The resource you requested could not be found; please contact the developer :3");
-	}
-	// If error was "The requested resource does not exist."
-	else if (error === "The requested resource does not exist.") {
-		showErrorHandling(header, list, "The requested resource does not exist :(", "The requested resource does not exist; please contact the developer :3");
-	}
-	// If error was "Invalid parameters."
-	else if (error === "Invalid parameters.") {
-		showErrorHandling(header, list, "Invalid parameters :(", "Invalid parameters; please contact the developer :3");
-	}
-
-	throw new Error(error);
-}
-
-// Show error message with Toast
-function showErrorHandling(header, list, message, error) {
-	Utilities.prototype.fade(list);
-	list.innerHTML = "";
-	header.innerHTML = `<h4 class="text-center">${message}</h4>`;
-	throw new Error(error);
 }

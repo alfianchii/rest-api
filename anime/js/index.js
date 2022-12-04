@@ -39,6 +39,9 @@ inputSearch.addEventListener("keyup", function (e) {
 	}
 });
 
+/*
+Cores function: get the anime's data and show it with pagination
+*/
 async function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
 		// Empty the header content, anime list and pagination when the search button got clicked
@@ -69,7 +72,7 @@ async function getAnime(keyword) {
 			Accept: "application/json",
 		},
 		body: JSON.stringify({
-			// query: query,
+			query: query,
 			variables: {
 				search: keyword,
 				// page: currentPage, // currentPage = 1
@@ -82,12 +85,12 @@ async function getAnime(keyword) {
 			return response.json();
 		})
 		.then((response) => {
-			console.log(response);
 			// If the response was contains errors
 			if (response.errors) {
 				Err.handling(headerContent, animeList, response.errors[0].message);
 			}
 
+			// If the response was success
 			return response.data.Page;
 		});
 }
@@ -188,6 +191,7 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 			// Validate score if null/undefined
 			const average = Valid.validate(averageScore);
 
+			// Add the anime's data to the content
 			content += `
 				<div class="col-12 col-lg-6 col-md-6 mb-5">
 					<div class="card">
@@ -280,6 +284,7 @@ function paginationClick(e) {
 		const childrens = paginationBtn.children;
 		let currentPage = e.target; // e.target.innerHTML
 		const allBtn = document.querySelectorAll(".page-link");
+
 		if (currentPage.textContent !== "Prev" && currentPage.textContent !== "Next") {
 			// Remove active
 			for (const child of childrens) {
@@ -326,6 +331,7 @@ function showPagination(totalData = 1, perPage, currentPage) {
 	// Parse the current page to integer
 	currentPage = parseInt(currentPage);
 
+	// Empty the pagination
 	paginationBtn.innerHTML = "";
 
 	// If Math return 0, go return 1 instead nothing. If no, return the result

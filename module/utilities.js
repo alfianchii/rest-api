@@ -2,17 +2,22 @@
 Utilities function
 */
 
+// Path: module\utilities.js
 class Utilities {
 	// Input keyword
 	inputKeyword(input, type, headerContent, content, paginationBtn) {
+		// Check if elements are empty
 		content ? (content.innerHTML = "") : null;
 		paginationBtn ? (paginationBtn.innerHTML = "") : null;
 
+		// Check if input was empty, if so, throw error
 		if (input === "") {
 			this.fade(headerContent);
 			headerContent.innerHTML = `<h4 class="text-center">Type in the ${type} you want to search for first please~!! :></h4>`;
 			throw new Error("Input cannot be empty!! >_<");
 		}
+
+		// If no, return the input
 		return input;
 	}
 
@@ -44,7 +49,7 @@ class Utilities {
 		}, 150);
 	}
 
-	// Toast click
+	// Toast click (for error usually)
 	toastClick(toastContent, toastButton, error) {
 		toastContent.innerHTML = `
 		<div class="toast-header">

@@ -60,7 +60,7 @@ async function getAndShowMovie() {
 	}
 }
 
-// Get movie
+// Get movie; return movie and movie details
 async function getMovie(keyword) {
 	return await fetch(`https://www.omdbapi.com/?apikey=9da156cc&s=${keyword}`)
 		.then((response) => response.json())
@@ -70,40 +70,53 @@ async function getMovie(keyword) {
 				errorHandling.prototype.handling(headerContent, movieList, response.Error);
 			}
 
+			// If no error, then get movies
 			let movies = response.Search;
 
 			let imdbID = movies.map((movie) => {
 				return movie.imdbID;
 			});
 
+			// Get movie details from imdbID
 			const movieDetails = await getMovieDetail(imdbID);
 
+			// Return movies and the details
 			return movieDetails;
 		});
 }
 
+// Get movie details
 async function getMovieDetail(imdbID) {
+	// Get movie details
 	let movieDetails = await imdbID.map(async (id) => {
 		return await fetch(`https://www.omdbapi.com/?apikey=9da156cc&i=${id}`)
 			.then((response) => response.json())
 			.then((response) => {
+				// If the response was false
 				if (response.Response === "False") {
+					// Show error message with Toast
 					errorHandling.prototype.handling(headerContent, movieList, response.Error);
 				}
+
+				// If no error, then get movie details
 				return response;
 			});
 	});
 
+	// Wait until all movie details are fetched
 	movieDetails = await Promise.all(movieDetails).then((r) => r);
 
+	// Return movie details
 	return movieDetails;
 }
 
+// Update UI: show movie include details
 function updateUI(movieDetails) {
 	// Header content
 	headerContent.innerHTML = `
 	<h4 class="text-center">Search result of '${inputMovie.value}' :</h4>`;
 
+	// Movie list
 	let content = "";
 	movieDetails.forEach((mv) => {
 		content += `
@@ -170,5 +183,6 @@ function updateUI(movieDetails) {
 				</div>`;
 	});
 
+	// Add movie details to the DOM
 	movieList.innerHTML = content;
 }

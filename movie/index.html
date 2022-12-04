@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Alfianchii || Movie</title>
+		<title>Alfyn || Movie</title>
 
 		<link rel="stylesheet" href="../assets/css/main/app.css" />
 		<link rel="stylesheet" href="../assets/css/main/app-dark.css" />
@@ -105,7 +105,7 @@
 				</header>
 
 				<div class="mb-5 text-center text-xl-start">
-					<h3 class="font-extrabold">Alfyn.mv</h3>
+					<h3 class="font-extrabold">Movie</h3>
 					<span class="mb-3 d-inline-block h6 font-monospace font-weight-light text-muted"
 						>Made with
 						<svg fill="red" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -122,20 +122,20 @@
 								<div class="card-body" id="all-content">
 									<div class="row">
 										<div class="col-md-3 pe-0 mb-1 mt-1">
-											<h4 class="text-center text-md-start">Search Anime</h4>
+											<h4 class="text-center text-md-start">Search Movie</h4>
 										</div>
 										<div class="col-md-9 ps-0 mb-1 mt-1">
 											<div class="input-group">
-												<input type="text" class="form-control" id="input-keyword" placeholder="Anime title..." autofocus />
-												<button class="btn btn-primary" type="button" id="search-button">Search</button>
+												<input type="text" class="form-control" id="input-keyword-movie" placeholder="Movie title..." autofocus />
+												<button class="btn btn-primary" type="button" id="search-button-movie">Search</button>
 											</div>
 										</div>
 									</div>
 
 									<div class="row">
 										<div class="col-12 my-5">
-											<div id="header-content">
-												<h4 class="text-center">Welcome to ALFI.ANI~!! (<_<)</h4>
+											<div id="header-content-movie" class="fade show">
+												<h4 class="text-center">Welcome to movie~!! (<_<)</h4>
 											</div>
 										</div>
 									</div>
@@ -143,7 +143,7 @@
 									<div class="row">
 										<div class="col-12">
 											<!-- Pagination -->
-											<section class="row fade show" id="anime-list" class="paginated-list"></section>
+											<section class="row fade show" id="movie-list" class="paginated-list"></section>
 										</div>
 									</div>
 
@@ -160,7 +160,7 @@
 					</section>
 
 					<!-- Toast -->
-					<div id="">
+					<div class="">
 						<button type="button" class="d-none" id="liveToastBtn">Show live toast</button>
 						<div class="toast-container position-fixed bottom-0 end-0 p-3">
 							<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

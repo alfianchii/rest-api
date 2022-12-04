@@ -1,25 +1,18 @@
-// Export
-export { fade, spinner };
+// Import some utilities
+import Utilities from "../module/utilities.js";
+const Utils = new Utilities();
 
 // Import validate functions
-import {
-	validate,
-	validateCoverImages,
-	validateDateFormat,
-	validateDescriptions,
-	validateGenres,
-	validateNoUnderscore,
-	validateSiteLinks,
-	validateStudioProducer,
-	validateSynonyms,
-	validateTags,
-	validateTitles,
-	inputKeyword,
-	validateAnime,
-} from "../module/validate.js";
+import Validate from "../module/validate.js";
 
-// Import DOM elements
-import { searchBtn, animeList, headerContent, paginationBtn, toastContent, toastBtn, inputSearch } from "../module/domElements.js";
+// DOM elements
+let searchBtn = document.getElementById("input-keyword");
+let animeList = document.getElementById("anime-list");
+let headerContent = document.querySelector("#header-content");
+let paginationBtn = document.querySelector(".pagination");
+let toastContent = document.getElementById("liveToast");
+let toastBtn = document.getElementById("liveToastBtn");
+let inputSearch = document.getElementById("input-keyword");
 
 // Import graphql query
 import { default as query } from "../module/query.js";
@@ -43,19 +36,21 @@ inputSearch.addEventListener("keyup", function (e) {
 
 async function getAndShowAnime(currentPg = 1, perPage = 6) {
 	try {
-		const keyword = inputKeyword(searchBtn.value);
-		// Loading when retrieving data
-		spinner(headerContent, animeList, paginationBtn);
+		// Empty the header content, anime list and pagination when the search button got clicked
+		const keyword = Utils.inputKeyword(searchBtn.value, "anime", headerContent, animeList, paginationBtn);
 
-		// Get the anime's data
-		const data = validateAnime(await getAnime(keyword, currentPg));
+		// Loading when retrieving data
+		Utils.spinner(headerContent, animeList, paginationBtn);
+
+		// Get the anime's data then validate it
+		const data = Validate.anime(await getAnime(keyword, currentPg), headerContent, animeList);
 
 		// Then show
 		showAnime(data, currentPg, perPage);
 	} catch (error) {
 		// animeList.innerHTML = "";
 		// paginationBtn.innerHTML = "";
-		toastClick(toastContent, toastBtn, error);
+		Utils.toastClick(toastContent, toastBtn, error);
 	}
 }
 
@@ -144,49 +139,49 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 			const animeId = id;
 
 			// Validate language title and set it to romaji if it's not available in english. If it's not available in romaji, set it to native.
-			const [englishTitle, romajiTitle, nativeTitle] = validateTitles(title);
+			const [englishTitle, romajiTitle, nativeTitle] = Validate.titles(title);
 
 			// Validate if the anime have no a cover image
-			const cover = validateCoverImages(coverImage);
+			const cover = Validate.coverImages(coverImage);
 
 			// Validate description if null/undefined and remove the source
-			const desc = validateDescriptions(description);
+			const desc = Validate.descriptions(description);
 
 			// Validate released date if null/undefined
-			const [day, month, year] = validateDateFormat(startDate);
+			const [day, month, year] = Validate.dateFormat(startDate);
 
 			// Validate format if null/undefined
-			const type = validateNoUnderscore(format);
+			const type = Validate.noUnderscore(format);
 
 			// Validate genres if null/undefined
-			const genre = validateGenres(genres);
+			const genre = Validate.genres(genres);
 
 			// Validate studio if null/undefined
-			const studioProducer = validateStudioProducer(studio1);
+			const studioProducer = Validate.studioProducer(studio1);
 
 			// Validate status if null/undefined and seperate it to 2 words (no underscore)
-			const stat = validateNoUnderscore(status);
+			const stat = Validate.noUnderscore(status);
 
 			// Validate episodes if null/undefined
-			const episode = validate(episodes);
+			const episode = Validate.validate(episodes);
 
 			// Validate duration if null/undefined
-			const time = validate(duration);
+			const time = Validate.validate(duration);
 
 			// Validate the links that just Official Site, Youtube, Blibli, and Netflix
-			const externalLink = validateSiteLinks(externalLinks);
+			const externalLink = Validate.siteLinks(externalLinks);
 
 			// Validate synonyms if null/undefined
-			const synonym = validateSynonyms(synonyms);
+			const synonym = Validate.synonyms(synonyms);
 
 			// Validate tags if null/undefined
-			const tag = validateTags(tags);
+			const tag = Validate.tags(tags);
 
 			// Validate adaptation if null/undefined and seperate it to 2 words (no underscore)
-			const adaptation = validateNoUnderscore(source);
+			const adaptation = Validate.noUnderscore(source);
 
 			// Validate score if null/undefined
-			const average = validate(averageScore);
+			const average = Validate.validate(averageScore);
 
 			content += `
 				<div class="col-12 col-lg-6 col-md-6 mb-5">
@@ -360,49 +355,4 @@ function showPagination(totalData = 1, perPage, currentPage) {
 
 	// Show pagination
 	paginationBtn.innerHTML = paginationContent;
-}
-
-/*
-Utilities function
-*/
-
-// Spinner loading
-function spinner(header, list, pagination) {
-	// Empty the contents
-	list.innerHTML = "";
-	pagination.innerHTML = "";
-	header.innerHTML = "";
-
-	// Add text
-	header.innerHTML = `<h4 class="text-center">Searching ...</h4>`;
-	// Add spinner
-	list.innerHTML = `
-		<div class="text-center">
-			<div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
-				<span class="visually-hidden">Loading...</span>
-			</div>
-		</div>
-	`;
-}
-
-function fade(element) {
-	element.classList.replace("show", "hide");
-	setTimeout(() => {
-		element.classList.replace("hide", "show");
-	}, 150);
-}
-
-function toastClick(toastContent, toastBtn, message) {
-	toastContent.innerHTML = `
-		<div class="toast-header">
-			<svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-				<rect width="100%" height="100%" fill="#007aff"></rect>
-			</svg>
-			<strong class="me-auto">Announcement</strong>
-			<!-- <small>11 mins ago</small> -->
-			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-		</div>
-		<div class="toast-body">${message}</div>`;
-
-	toastBtn.click();
 }

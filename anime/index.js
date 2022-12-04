@@ -206,11 +206,11 @@ function showAnime(data, currentPage = 1, perPage = 6) {
 										role="document">
 										<div class="modal-content">
 											<div class="modal-header bg-primary">
-												<div class="d-xl-flex justify-content-xl-around w-100 text-center">
+												<div class="d-xl-flex justify-content-xl-around w-100 text-center fst-italic">
 													<div>
 														<h5 class="modal-title white" id="myModalLabel160">${englishTitle}</h5>
 													</div>
-													<div>
+													<div class="fw-italic">
 														<h5 class="modal-title white">${romajiTitle}</h5>
 													</div>
 													<div>

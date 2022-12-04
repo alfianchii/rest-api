@@ -109,12 +109,14 @@ function updateUI(movieDetails) {
 
 	let content = "";
 	movieDetails.forEach((mv) => {
-		content += `<div class="col-12 col-lg-4 col-md-6">
+		content += `
+				<div class="col-12 col-lg-4 col-md-6 mb-5">
 					<div class="card">
 						<div class="card-body">
-							<h4 class="card-title">${mv.Title}</h4>
+							<h4 class="card-title mb-4">${mv.Title}</h4>
+							<hr>
 							<img src="${mv.Poster}" alt="${mv.Title}" class="img-fluid w-100">
-							<h6 class="font-extrabold my-3">${mv.Year}</h6>
+							<h5 class="font-extrabold my-3">${mv.Year}</h5>
 							<div class="modal-primary me-1 mb-1 d-inline-block">
 								<!-- Button trigger for primary themes modal -->
 								<button type="button" class="btn btn-primary" data-bs-toggle="modal"
